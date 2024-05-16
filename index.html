@@ -107,6 +107,58 @@
       border: none;
     }
   </style>
+  <style>
+  /* Animated background gradient */
+  body {
+    background: linear-gradient(45deg, #ff6b6b, #ffa500, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Blinking text */
+  .blink {
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Marquee text */
+  .marquee {
+    white-space: nowrap;
+    overflow: hidden;
+    animation: marquee 10s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% { text-indent: 100%; }
+    100% { text-indent: -100%; }
+  }
+</style>
+
+<div class="blink">This text is blinking!</div>
+<div class="marquee">This text is scrolling across the screen like an old-school marquee.</div>
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="duckjs">anti-sadness<br>duck button</div>
 </body>
