@@ -23,54 +23,51 @@
     var imgduck = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAVklEQVQoz6WRSw6AMAhEH5yiR+5Re4txIwka1LbOik8eGQA2ZDlpQhEPu/ZKKAMzIADqSB2dsKohUfMAbk2egE97lYZhPu0/yVdOHYP995/edluxX+oAarQf4d+S0rQAAAAASUVORK5CYII=";
     var imgduckopen = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAWUlEQVQoz5WRwQ3AIAwDz0zRkRmVLdxPI1VpoHAvBDrLFuLFZRznIcQEVcKOCIA7dseP7CokaCGkmiURpNlDrhf3Q2i5qWIIte3RedMuEXwkff7pb9tJ/ZIbxb4jzL1bE3wAAAAASUVORK5CYII=";
 
-    function cssAddClass( foo ) {
+    function cssAddClass(foo) {
       // Check if style element exists. If not, create one.
-      if( document.getElementsByTagName('style')[0] ) {
-
+      if (document.getElementsByTagName('style')[0]) {
         document.getElementsByTagName('style')[0].innerHTML += "\n" + foo;
-
       } else {
-
         var style = document.createElement('style');
         style.innerHTML = foo;
 
         var head = document.getElementsByTagName('head')[0];
         head.appendChild(style);
-
       }
-
     }
 
-    function duckAnim () {
+    function duckAnim() {
       // TODO: Should be user-adjustable.
       let addedright = -130;
 
       forwards = setInterval(function () {
-
         addedright += 2;
         duck.style.right = String(addedright) + "px";
 
-        if (duck.style.right == "0px") { clearInterval(forwards); }
-
+        if (duck.style.right == "0px") {
+          clearInterval(forwards);
+        }
       }, 10);
 
-      var quack = setTimeout(function(){ duck.src = imgduckopen; ducksound.play(); },800);
+      var quack = setTimeout(function () {
+        duck.src = imgduckopen;
+        ducksound.play();
+      }, 800);
 
-      var quacknt = setTimeout(function(){ duck.src = imgduck; },900);
+      var quacknt = setTimeout(function () {
+        duck.src = imgduck;
+      }, 900);
 
-      backwards = setTimeout(function(){
-
+      backwards = setTimeout(function () {
         var innerback = setInterval(function () {
-
           addedright -= 2;
           duck.style.right = String(addedright) + "px";
 
-          if (duck.style.right == "-130px") { clearInterval(innerback); }
-
+          if (duck.style.right == "-130px") {
+            clearInterval(innerback);
+          }
         }, 10);
-
-      },2000);
-
+      }, 2000);
     }
 
     var duck = new Image();
@@ -78,8 +75,7 @@
 
     var ducksound = new Audio(oggduck);
 
-
-    window.onload = function() {
+    window.onload = function () {
       duck.className = "duck";
 
       // Get div from DOM.
@@ -95,33 +91,27 @@
       duckbutton.className = "duckbutton";
 
       if (ducktext == "") {
-        duckbutton.innerHTML = "click me<br>for duck"
+        duckbutton.innerHTML = "click me<br>for duck";
       } else {
         duckbutton.innerHTML = ducktext;
       }
 
-      duckbutton.onclick = function(){	
-        if(!backwards || !forwards){
+      duckbutton.onclick = function () {
+        if (!backwards || !forwards) {
           duckAnim();
-          setTimeout(function(){backwards = null; forwards = null;},2500)
+          setTimeout(function () {
+            backwards = null;
+            forwards = null;
+          }, 2500);
         }
       };
 
-      duckdiv.appendChild(duckbutton); duckdiv.appendChild(duck);
+      duckdiv.appendChild(duckbutton);
+      duckdiv.appendChild(duck);
 
       cssAddClass('.duck { image-rendering:pixelated; image-rendering: crisp-edges; width:130px; display:block; right:-130px; position:fixed; overflow:none; bottom:' + String(parseInt(duckbutton.clientHeight) + 20) + 'px }');
     }
-  </script>
-</head>
-<body>
-  <div class="error-bar" id="errorBar">
-    The merch store failed to load. Please <a href="https://beaec8-2.myshopify.com" target="_blank">click here</a> to visit the store directly.
-  </div>
-  <iframe src="https://beaec8-2.myshopify.com" onload="hideErrorBar()" onerror="showErrorBar()"></iframe>
 
-  <div id="duckjs">anti-sadness<br>duck button</div>
-
-  <script>
     function showErrorBar() {
       document.getElementById('errorBar').style.display = 'block';
     }
@@ -130,5 +120,15 @@
       document.getElementById('errorBar').style.display = 'none';
     }
   </script>
+</head>
+<body>
+  <div class="error-bar" id="errorBar">
+    The merch store failed to load. Please <a href="https://beaec8-2.myshopify.com" target="_blank">click here</a> to visit the store directly.
+  </div>
+  <iframe src="https://beaec8-2.myshopify.com" onload="hideErrorBar()" onerror="showErrorBar()">
+    <p>Unable to load the merch store. Please <a href="https://beaec8-2.myshopify.com" target="_blank">click here</a> to visit the store directly.</p>
+  </iframe>
+
+  <div id="duckjs">anti-sadness<br>duck button</div>
 </body>
 </html>
