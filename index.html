@@ -15,7 +15,9 @@
       background-size: 400% 400%;
       animation: gradient 15s ease infinite;
       font-size: 72px; /* Set default font size */
-      overflow: hidden; /* Prevent scrollbars */
+      overflow: auto; /* Allow scrolling */
+      position: relative; /* Ensure duck button is positioned correctly */
+      min-height: 100vh; /* Ensure the body takes up the full viewport height */
     }
 
     @keyframes gradient {
@@ -137,7 +139,7 @@
         }
 
         .duck-bounce {
-          position: absolute;
+          position: fixed;
           width: 130px;
           height: auto;
           animation: duckBounce 10s linear infinite;
