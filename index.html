@@ -14,6 +14,7 @@
       background: linear-gradient(45deg, #ff6b6b, #ffa500, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
       background-size: 400% 400%;
       animation: gradient 15s ease infinite;
+      font-size: 72px; /* Set default font size */
     }
 
     @keyframes gradient {
@@ -62,6 +63,11 @@
   <div class="blink">This text is blinking!</div>
   <div class="marquee">This text is scrolling across the screen like an old-school marquee.</div>
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <div id="textbox">
+    <input type="number" id="fontSizeInput" placeholder="Enter font size..." />
+    <button onclick="setFontSize()">Set Font Size</button>
+    <button onclick="toggleBold()">Bold</button>
+  </div>
   <div id="duckjs">anti-sadness<br>duck button</div>
 
   <script>
@@ -143,13 +149,24 @@
       cssAddClass('.duck { image-rendering:pixelated; image-rendering: crisp-edges; width:130px; display:block; right:-130px; position:absolute; overflow:none; bottom:' + String(parseInt(duckbutton.clientHeight) + 20) + 'px }');
     }
 
-    // Font type and size selection
-    function changeFontType(type) {
-      document.body.style.fontFamily = type;
+    // Font size selection
+    function setFontSize() {
+      const fontSizeInput = document.getElementById('fontSizeInput');
+      const fontSize = fontSizeInput.value.trim();
+      if (fontSize !== '') {
+        document.body.style.fontSize = fontSize + 'px';
+        fontSizeInput.value = ''; // Clear the input field
+      }
     }
 
-    function changeFontSize(size) {
-      document.body.style.fontSize = size + "px";
+    // Bold text toggle
+    function toggleBold() {
+      const body = document.body;
+      if (body.style.fontWeight === 'bold') {
+        body.style.fontWeight = 'normal';
+      } else {
+        body.style.fontWeight = 'bold';
+      }
     }
 
     // Scrolling suit of cards animation
@@ -164,16 +181,23 @@
           position: fixed;
           top: 50%;
           left: 0;
-          width: 100px;
-          height: 150px;
-          background-color: red;
-          border-radius: 10px;
+          width: 130px;
+          height: auto;
           animation: cardScroll 10s linear infinite;
         }
       `);
 
-      let cardContainer = document.createElement('div');
+      let cardContainer = document.createElement('img');
       cardContainer.className = 'card';
+      cardContainer.src = imgduck;
+      cardContainer.addEventListener('animationiteration', function() {
+        ducksound.play();
+        if (cardContainer.src === imgduck) {
+          cardContainer.src = imgduckopen;
+        } else {
+          cardContainer.src = imgduck;
+        }
+      });
       document.body.appendChild(cardContainer);
     }
   </script>
@@ -181,9 +205,6 @@
   <button onclick="changeFontType('Arial')">Arial</button>
   <button onclick="changeFontType('Verdana')">Verdana</button>
   <button onclick="changeFontType('Courier New')">Courier New</button>
-  <button onclick="changeFontSize(12)">12px</button>
-  <button onclick="changeFontSize(16)">16px</button>
-  <button onclick="changeFontSize(20)">20px</button>
   <button onclick="startCardAnimation()">Start Card Animation</button>
 </body>
 </html>
