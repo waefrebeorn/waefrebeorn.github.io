@@ -139,7 +139,7 @@
         }
 
         .duck-bounce {
-          position: fixed;
+          position: absolute;
           width: 130px;
           height: auto;
           animation: duckBounce 10s linear infinite;
@@ -161,14 +161,7 @@
       duckContainer.style.top = `${startY}px`;
       duckContainer.style.transform = `rotate(${startDirection}deg)`;
 
-      duckContainer.addEventListener('animationiteration', function() {
-        if (duckContainer.src === imgduck) {
-          duckContainer.src = imgduckopen;
-        } else {
-          duckContainer.src = imgduck;
-        }
-        quackOnEdges(duckContainer);
-      });
+      duckContainer.addEventListener('animationiteration', quackOnEdges.bind(null, duckContainer));
 
       document.body.appendChild(duckContainer);
       duckAnimations.push(duckContainer);
