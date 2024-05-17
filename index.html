@@ -63,7 +63,7 @@
   </style>
 </head>
 <body>
-  <div class="blink">Mongo Testing!</div>
+  <div class="blink">This text is blinking!</div>
   <div class="marquee">This text is scrolling across the screen like an old-school marquee.</div>
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <div id="textbox">
@@ -125,13 +125,13 @@
             transform: translate(0, 0);
           }
           25% {
-            transform: translate(calc(75vw - 130px), calc(100vh - 130px));
+            transform: translate(calc(65vw - 130px), calc(65vh - 130px));
           }
           50% {
-            transform: translate(0, calc(100vh - 130px));
+            transform: translate(0, calc(65vh - 130px));
           }
           75% {
-            transform: translate(calc(75vw - 130px), 0);
+            transform: translate(calc(65vw - 130px), 0);
           }
           100% {
             transform: translate(0, 0);
@@ -180,7 +180,12 @@
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      if (rect.left < 0 || rect.right > windowWidth || rect.top < 0 || rect.bottom > windowHeight) {
+      const leftEdge = rect.left < 0;
+      const rightEdge = rect.right > windowWidth;
+      const topEdge = rect.top < 0;
+      const bottomEdge = rect.bottom > windowHeight;
+
+      if (leftEdge || rightEdge || topEdge || bottomEdge) {
         const randomPitch = Math.random() * 0.4 + 0.8; // Random pitch between 0.8 and 1.2
         const quackSound = new Audio(oggduck);
         quackSound.playbackRate = randomPitch; // Set random pitch
@@ -190,6 +195,19 @@
           duckContainer.src = imgduckopen;
         } else {
           duckContainer.src = imgduck;
+        }
+
+        // Adjust position to prevent drifting
+        if (leftEdge) {
+          duckContainer.style.left = '0px';
+        } else if (rightEdge) {
+          duckContainer.style.left = `${windowWidth - 130}px`;
+        }
+
+        if (topEdge) {
+          duckContainer.style.top = '0px';
+        } else if (bottomEdge) {
+          duckContainer.style.top = `${windowHeight - 130}px`;
         }
       }
     }
