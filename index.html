@@ -21,15 +21,9 @@
     }
 
     @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Blinking text */
@@ -38,15 +32,9 @@
     }
 
     @keyframes blink {
-      0% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 1;
-      }
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
     }
 
     /* Marquee text */
@@ -60,16 +48,56 @@
       0% { text-indent: 100%; }
       100% { text-indent: -100%; }
     }
+
+    /* 3D cube */
+    .cube {
+      position: relative;
+      margin: 100px auto;
+      width: 150px;
+      transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg);
+      animation: spin 7s infinite linear;
+    }
+
+    .cube div {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ccc;
+    }
+
+    .cube .front  { transform: translateZ(75px); }
+    .cube .back   { transform: rotateY(180deg) translateZ(75px); }
+    .cube .left   { transform: rotateY(-90deg) translateZ(75px); }
+    .cube .right  { transform: rotateY(90deg) translateZ(75px); }
+    .cube .top    { transform: rotateX(90deg) translateZ(75px); }
+    .cube .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+    @keyframes spin {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to { transform: rotateX(360deg) rotateY(360deg); }
+    }
   </style>
 </head>
 <body>
   <div class="blink">https://beaec8-2.myshopify.com/</div>
   <div class="marquee">Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH</div>
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
   <div id="textbox">
     <input type="number" id="fontSizeInput" placeholder="Enter font size..." />
     <button onclick="setFontSize()">Set Font Size</button>
     <button onclick="toggleBold()">Bold</button>
+  </div>
+
+  <div class="cube">
+    <div class="front">Front</div>
+    <div class="back">Back</div>
+    <div class="left">Left</div>
+    <div class="right">Right</div>
+    <div class="top">Top</div>
+    <div class="bottom">Bottom</div>
   </div>
 
   <script>
@@ -78,7 +106,6 @@
     var imgduckopen = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAACXBIWXMAAC4jAAAuIwF4pT92AAAAWUlEQVQoz5WRwQ3AIAwDz0zRkRmVLdxPI1VpoHAvBDrLFuLFZRznIcQEVcKOCIA7dseP7CokaCGkmiURpNlDrhf3Q2i5qWIIte3RedMuEXwkff7pb9tJ/ZIbxb4jzL1bE3wAAAAASUVORK5CYII=";
 
     function cssAddClass(foo) {
-      // Check if style element exists. If not, create one.
       if (document.getElementsByTagName('style')[0]) {
         document.getElementsByTagName('style')[0].innerHTML += "\n" + foo;
       } else {
@@ -89,27 +116,20 @@
       }
     }
 
-    // Font size selection
     function setFontSize() {
       const fontSizeInput = document.getElementById('fontSizeInput');
       const fontSize = fontSizeInput.value.trim();
       if (fontSize !== '') {
         document.body.style.fontSize = fontSize + 'px';
-        fontSizeInput.value = ''; // Clear the input field
+        fontSizeInput.value = '';
       }
     }
 
-    // Bold text toggle
     function toggleBold() {
       const body = document.body;
-      if (body.style.fontWeight === 'bold') {
-        body.style.fontWeight = 'normal';
-      } else {
-        body.style.fontWeight = 'bold';
-      }
+      body.style.fontWeight = (body.style.fontWeight === 'bold') ? 'normal' : 'bold';
     }
 
-    // Duck animation
     let duckAnimations = [];
     let duckCount = 0;
 
@@ -121,21 +141,11 @@
 
       cssAddClass(`
         @keyframes duckBounce {
-          0% {
-            transform: translate(0, 0);
-          }
-          25% {
-            transform: translate(calc(65vw - 130px), calc(65vh - 130px));
-          }
-          50% {
-            transform: translate(0, calc(65vh - 130px));
-          }
-          75% {
-            transform: translate(calc(65vw - 130px), 0);
-          }
-          100% {
-            transform: translate(0, 0);
-          }
+          0% { transform: translate(0, 0); }
+          25% { transform: translate(calc(65vw - 130px), calc(65vh - 130px)); }
+          50% { transform: translate(0, calc(65vh - 130px)); }
+          75% { transform: translate(calc(65vw - 130px), 0); }
+          100% { transform: translate(0, 0); }
         }
 
         .duck-bounce {
@@ -150,11 +160,10 @@
       duckContainer.className = 'duck-bounce';
       duckContainer.src = imgduck;
 
-      // Set random starting position and direction
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
-      const startX = Math.random() * (windowWidth - 260); // Limit maximum X position
-      const startY = Math.random() * (windowHeight - 260); // Limit maximum Y position
+      const startX = Math.random() * (windowWidth - 260);
+      const startY = Math.random() * (windowHeight - 260);
       const startDirection = Math.random() * 360;
 
       duckContainer.style.left = `${startX}px`;
@@ -179,9 +188,9 @@
       const bottomEdge = rect.bottom > windowHeight;
 
       if (leftEdge || rightEdge || topEdge || bottomEdge) {
-        const randomPitch = Math.random() * 0.4 + 0.8; // Random pitch between 0.8 and 1.2
+        const randomPitch = Math.random() * 0.4 + 0.8;
         const quackSound = new Audio(oggduck);
-        quackSound.playbackRate = randomPitch; // Set random pitch
+        quackSound.playbackRate = randomPitch;
         quackSound.play();
 
         if (duckContainer.src === imgduck) {
@@ -190,7 +199,6 @@
           duckContainer.src = imgduck;
         }
 
-        // Adjust position to prevent drifting
         if (leftEdge) {
           duckContainer.style.left = '0px';
         } else if (rightEdge) {
@@ -213,7 +221,6 @@
       duckCount = 0;
     }
 
-    // Handle scroll events
     window.addEventListener('scroll', handleScroll);
 
     function handleScroll() {
@@ -222,10 +229,9 @@
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        // Check if the duck is outside the visible viewport
         if (rect.right < 0 || rect.left > windowWidth || rect.bottom < 0 || rect.top > windowHeight) {
-          const startX = Math.random() * (windowWidth - 260); // Limit maximum X position
-          const startY = Math.random() * (windowHeight - 260); // Limit maximum Y position
+          const startX = Math.random() * (windowWidth - 260);
+          const startY = Math.random() * (windowHeight - 260);
 
           duckContainer.style.left = `${startX}px`;
           duckContainer.style.top = `${startY}px`;
