@@ -1,8 +1,11 @@
+console.log('wacky.js loaded');
+
 let counter = 0;
 
 function incrementCounter() {
     counter++;
     document.getElementById('counter').innerText = 'Counter: ' + counter;
+    console.log('Counter incremented: ' + counter);
 }
 
 const duckImages = {
@@ -16,6 +19,7 @@ let isRotating = false;
 function changeBackground() {
     const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
     document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    console.log('Background changed');
 }
 
 function rotateCanvas() {
@@ -24,6 +28,7 @@ function rotateCanvas() {
         isRotating = true;
         canvas.style.transition = 'transform 1s';
         canvas.style.transform = 'rotate(360deg)';
+        console.log('Canvas rotated');
         setTimeout(() => {
             canvas.style.transform = '';
             isRotating = false;
@@ -34,6 +39,7 @@ function rotateCanvas() {
 function quackDuck() {
     const duckSound = new Audio('quack.mp3');
     duckSound.play();
+    console.log('Duck quacked');
     const canvas = document.getElementById('pong-game');
     if (currentDuckState === 'closed') {
         currentDuckState = 'open';
@@ -131,5 +137,10 @@ function game() {
 }
 
 document.getElementById('start-duck-animation').addEventListener('click', function() {
+    console.log('Start Duck Animation clicked');
     setInterval(game, 1000 / 60);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
 });
