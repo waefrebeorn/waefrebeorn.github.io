@@ -1,337 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Waefre Beorn's Merch Store</title>
-  <style>
-    iframe {
-      width: 100%;
-      height: 800px;
-      border: none;
-    }
-
-    /* Animated background gradient */
-    body {
-      background: linear-gradient(45deg, #ff6b6b, #ffa500, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      font-size: 72px; /* Set default font size */
-      overflow: auto; /* Allow scrolling */
-      position: relative; /* Ensure duck button is positioned correctly */
-      min-height: 100vh; /* Ensure the body takes up the full viewport height */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    @keyframes gradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Blinking text */
-    .blink {
-      animation: blink 1s infinite;
-      cursor: pointer;
-    }
-
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    /* Marquee text */
-    .marquee {
-      white-space: nowrap;
-      overflow: hidden;
-      animation: marquee 10s linear infinite;
-    }
-
-    @keyframes marquee {
-      0% { text-indent: 100%; }
-      100% { text-indent: -100%; }
-    }
-
-    /* 3D cube */
-    .cube {
-      position: relative;
-      margin: 100px auto;
-      width: 150px;
-      transform-style: preserve-3d;
-      transform: rotateX(0deg) rotateY(0deg);
-      animation: spin 7s infinite linear;
-      cursor: pointer;
-    }
-
-    .cube div {
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    .cube .front  { transform: translateZ(75px); background-image: url('front.png'); }
-    .cube .back   { transform: rotateY(180deg) translateZ(75px); background-image: url('back.png'); }
-    .cube .left   { transform: rotateY(-90deg) translateZ(75px); background-image: url('left.png'); }
-    .cube .right  { transform: rotateY(90deg) translateZ(75px); background-image: url('right.png'); }
-    .cube .top    { transform: rotateX(90deg) translateZ(75px); background-image: url('top.png'); }
-    .cube .bottom { transform: rotateX(-90deg) translateZ(75px); background-image: url('bottom.png'); }
-
-    @keyframes spin {
-      from { transform: rotateX(0deg) rotateY(0deg); }
-      to { transform: rotateX(360deg) rotateY(360deg); }
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .duck-bounce {
-      position: absolute;
-      width: 130px;
-      height: auto;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="blink" onclick="window.location.href='https://beaec8-2.myshopify.com/'">https://beaec8-2.myshopify.com/</div>
-  <div class="marquee">Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH</div>
-  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <header>
+    <div class="blink" onclick="window.location.href='https://beaec8-2.myshopify.com/'">Shop Now</div>
+    <div class="marquee">Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH</div>
+  </header>
+  <main>
+    <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-  <div id="textbox">
-    <input type="number" id="fontSizeInput" placeholder="Enter font size..." />
-    <button onclick="setFontSize()">Set Font Size</button>
-    <button onclick="toggleBold()">Bold</button>
-  </div>
+    <div id="textbox">
+      <input type="number" id="fontSizeInput" placeholder="Enter font size..." />
+      <button onclick="setFontSize()">Set Font Size</button>
+      <button onclick="toggleBold()">Bold</button>
+    </div>
 
-  <div class="cube" onclick="quackOnCubeClick()">
-    <div class="front"></div>
-    <div class="back"></div>
-    <div class="left"></div>
-    <div class="right"></div>
-    <div class="top"></div>
-    <div class="bottom"></div>
-  </div>
-
-  <script>
-    var oggduck = 
-    var imgduck = 
-    var imgduckopen = 
-
-
-    var lastQuackTime = 0; // To control quack frequency
-    const quackCooldown = 500; // Minimum time between quacks in milliseconds
-
-    function cssAddClass(foo) {
-      if (document.getElementsByTagName('style')[0]) {
-        document.getElementsByTagName('style')[0].innerHTML += "\n" + foo;
-      } else {
-        var style = document.createElement('style');
-        style.innerHTML = foo;
-        var head = document.getElementsByTagName('head')[0];
-        head.appendChild(style);
-      }
-    }
-
-    function setFontSize() {
-      const fontSizeInput = document.getElementById('fontSizeInput');
-      const fontSize = fontSizeInput.value.trim();
-      if (fontSize !== '') {
-        document.body.style.fontSize = fontSize + 'px';
-        fontSizeInput.value = '';
-      }
-    }
-
-    function toggleBold() {
-      const body = document.body;
-      body.style.fontWeight = (body.style.fontWeight === 'bold') ? 'normal' : 'bold';
-    }
-
-    let duckAnimations = [];
-    let duckCount = 0;
-
-    function startDuckAnimation() {
-      if (duckCount === 25) {
-        alert('Maximum number of ducks reached!');
-        return;
-      }
-
-      cssAddClass(`
-        @keyframes duckBounce {
-          0% { transform: translate(0, 0); }
-          25% { transform: translate(calc(100vw - 130px), calc(100vh - 130px)); }
-          50% { transform: translate(0, calc(100vh - 130px)); }
-          75% { transform: translate(calc(100vw - 130px), 0); }
-          100% { transform: translate(0, 0); }
-        }
-
-        .duck-bounce {
-          position: absolute;
-          width: 130px;
-          height: auto;
-          animation: duckBounce 10s linear infinite;
-        }
-      `);
-
-      let duckContainer = document.createElement('img');
-      duckContainer.className = 'duck-bounce';
-      duckContainer.src = imgduck;
-
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-      const startX = Math.random() * (windowWidth - 260);
-      const startY = Math.random() * (windowHeight - 260);
-      const startDirection = Math.random() * 360;
-
-      duckContainer.style.left = `${startX}px`;
-      duckContainer.style.top = `${startY}px`;
-      duckContainer.style.transform = `rotate(${startDirection}deg)`;
-
-      duckContainer.addEventListener('animationiteration', quackOnEdges.bind(null, duckContainer));
-
-      document.body.appendChild(duckContainer);
-      duckAnimations.push(duckContainer);
-      duckCount++;
-    }
-
-    function quackOnEdges(duckContainer) {
-      const rect = duckContainer.getBoundingClientRect();
-      const windowWidth = window.innerWidth;
-      const windowHeight = window.innerHeight;
-      const currentTime = Date.now();
-
-      const leftEdge = rect.left < 0;
-      const rightEdge = rect.right > windowWidth;
-      const topEdge = rect.top < 0;
-      const bottomEdge = rect.bottom > windowHeight;
-
-      if ((leftEdge || rightEdge || topEdge || bottomEdge) && (currentTime - lastQuackTime > quackCooldown)) {
-        lastQuackTime = currentTime;
-
-        const randomPitch = Math.random() * 0.4 + 0.8;
-        const quackSound = new Audio(oggduck);
-        quackSound.playbackRate = randomPitch;
-        quackSound.play();
-
-        if (duckContainer.src === imgduck) {
-          duckContainer.src = imgduckopen;
-        } else {
-          duckContainer.src = imgduck;
-        }
-
-        if (leftEdge) {
-          duckContainer.style.left = '0px';
-        } else if (rightEdge) {
-          duckContainer.style.left = `${windowWidth - 130}px`;
-        }
-
-        if (topEdge) {
-          duckContainer.style.top = '0px';
-        } else if (bottomEdge) {
-          duckContainer.style.top = `${windowHeight - 130}px`;
-        }
-      }
-    }
-
-    function quackOnCubeClick() {
-      const randomPitch = Math.random() * 0.4 + 0.8;
-      const quackSound = new Audio(oggduck);
-      quackSound.playbackRate = randomPitch;
-      quackSound.play();
-    }
-
-    function resetDuckAnimation() {
-      duckAnimations.forEach(duckContainer => {
-        document.body.removeChild(duckContainer);
-      });
-      duckAnimations = [];
-      duckCount = 0;
-    }
-
-    window.addEventListener('scroll', handleScroll);
-
-    function handleScroll() {
-      duckAnimations.forEach(duckContainer => {
-        const rect = duckContainer.getBoundingClientRect();
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-
-        if (rect.right < 0 || rect.left > windowWidth || rect.bottom < 0 || rect.top > windowHeight) {
-          const startX = Math.random() * (windowWidth - 260);
-          const startY = Math.random() * (windowHeight - 260);
-
-          duckContainer.style.left = `${startX}px`;
-          duckContainer.style.top = `${startY}px`;
-        }
-      });
-    }
-  </script>
-
-  <button class="hidden" onclick="changeFontType('Arial')">Arial</button>
-  <button class="hidden" onclick="changeFontType('Verdana')">Verdana</button>
-  <button class="hidden" onclick="changeFontType('Courier New')">Courier New</button>
-  <button onclick="startDuckAnimation()">Start Duck Animation</button>
-  <button onclick="resetDuckAnimation()">Reset Duck Animation</button>
-
-  <div id="duckjs"></div>
+    <div class="cube" id="duckCube">
+      <div class="front"></div>
+      <div class="back"></div>
+      <div class="left"></div>
+      <div class="right"></div>
+      <div class="top"></div>
+      <div class="bottom"></div>
+    </div>
+  </main>
+  <footer>
+    <button onclick="startDuckAnimation()">Start Duck Animation</button>
+    <button onclick="resetDuckAnimation()">Reset Duck Animation</button>
+  </footer>
+  <script src="quack.js"></script>
+  <script src="duck.js"></script>
+  <script src="wacky.js"></script>
 </body>
 </html>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
-<div id='wacky-buttons'>
-    <button onclick='incrementCounter()'>Increment Counter</button>
-    <button onclick='changeBackground()'>Change Background</button>
-    <button onclick='rotateCanvas()'>Rotate Canvas</button>
-    <button onclick='quackDuck()'>Quack Duck</button>
-</div>
-<div id='counter'>Counter: 0</div>
-<canvas id='pong-game' width='800' height='400'></canvas>
