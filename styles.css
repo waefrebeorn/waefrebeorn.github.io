@@ -1,183 +1,111 @@
-body {
-  font-family: 'Roboto', sans-serif;
+* {
   margin: 0;
   padding: 0;
-  background: #121212;
-  color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-header {
-  background: #1f1f1f;
-  color: #ffffff;
-  padding: 20px 0;
-  text-align: center;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
 }
 
-header .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.nav-bar {
+  background-color: #222;
+  color: #fff;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-header h1 {
-  cursor: pointer;
-  background: #ff4081;
-  padding: 10px 20px;
-  border-radius: 5px;
-  animation: blink-animation 1.5s infinite;
+.nav-bar .logo {
+  font-size: 1.5em;
 }
 
-@keyframes blink-animation {
-  50% {
-    opacity: 0.6;
-  }
+.nav-bar nav ul {
+  list-style: none;
+  display: flex;
+}
+
+.nav-bar nav ul li {
+  margin-left: 20px;
+}
+
+.nav-bar nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1em;
 }
 
 .marquee {
-  overflow: hidden;
-  white-space: nowrap;
-  box-sizing: border-box;
+  background-color: #444;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  font-size: 1.2em;
   animation: marquee 10s linear infinite;
 }
 
 @keyframes marquee {
-  0% {
-    transform: translate(100%, 0);
-  }
-  100% {
-    transform: translate(-100%, 0);
-  }
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 
-main {
-  flex: 1;
-  padding: 40px 0;
-  background: #1f1f1f;
+.hero {
+  padding: 20px;
+  text-align: center;
 }
 
-main .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+.controls {
+  margin: 20px;
+  text-align: center;
+}
+
+.controls input, .controls button {
+  margin: 5px;
+}
+
+.animation, .game {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-}
-
-iframe {
-  max-width: 100%;
-  border: none;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-#textbox {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-#textbox input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#textbox button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  background: #ff4081;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-#textbox button:hover {
-  background: #e03570;
+  margin: 20px;
 }
 
 .cube {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   position: relative;
   transform-style: preserve-3d;
-  transform: rotateX(0deg) rotateY(0deg);
-  animation: rotateCube 10s infinite linear;
+  animation: spin 5s infinite linear;
 }
 
-@keyframes rotateCube {
-  from {
-    transform: rotateX(0deg) rotateY(0deg);
-  }
-  to {
-    transform: rotateX(360deg) rotateY(360deg);
-  }
-}
-
-.cube .face {
+.cube div {
   position: absolute;
-  width: 200px;
-  height: 200px;
-  background: #ff4081;
-  border: 2px solid #333;
-  opacity: 0.8;
+  width: 100px;
+  height: 100px;
+  background-color: #444;
+  background-image: url('banana');
+  background-size: cover;
 }
 
-.cube .front  { transform: translateZ(100px); }
-.cube .back   { transform: rotateY(180deg) translateZ(100px); }
-.cube .left   { transform: rotateY(-90deg) translateZ(100px); }
-.cube .right  { transform: rotateY(90deg) translateZ(100px); }
-.cube .top    { transform: rotateX(90deg) translateZ(100px); }
-.cube .bottom { transform: rotateX(-90deg) translateZ(100px); }
+@keyframes spin {
+  from { transform: rotateX(0deg) rotateY(0deg); }
+  to { transform: rotateX(360deg) rotateY(360deg); }
+}
 
 #pong-game {
-  border: 2px solid #fff;
-  border-radius: 10px;
+  border: 1px solid #000;
   margin-top: 20px;
 }
 
 footer {
-  background: #1f1f1f;
-  color: #ffffff;
-  text-align: center;
-  padding: 20px 0;
-  position: sticky;
-  bottom: 0;
-  z-index: 1000;
-}
-
-footer .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-footer button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  background: #ff4081;
+  background-color: #222;
   color: #fff;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-footer button:hover {
-  background: #e03570;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
