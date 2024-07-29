@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waefre Beorn's Merch Store</title>
+    <title>Waefre Beorn's Duck Emporium</title>
     <style>
         * {
             margin: 0;
@@ -11,91 +11,74 @@
             box-sizing: border-box;
         }
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f4f9;
-        }
-        .nav-bar {
-            background-color: #222;
+            font-family: "Comic Sans MS", cursive, sans-serif;
             color: #fff;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        .nav-links li {
-            margin-left: 1rem;
-        }
-        .nav-links a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .marquee {
-            background-color: #444;
-            color: #fff;
-            padding: 0.5rem;
-            white-space: nowrap;
+            background-color: #000;
             overflow: hidden;
         }
-        .marquee-content {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 20s linear infinite;
+        #youtube-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1000;
+            overflow: hidden;
         }
-        @keyframes marquee {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .hero {
-            background-color: #3498db;
-            color: #fff;
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-bottom: 2rem;
-        }
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .controls input, .controls button {
-            padding: 0.5rem;
-            font-size: 1rem;
-        }
-        .game-container {
+        .content {
+            position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
+            height: 100vh;
+        }
+        .glitter-text {
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: glitter 6s linear infinite;
+        }
+        @keyframes glitter {
+            0% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+            25% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+            50% { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+            75% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
+            100% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+        }
+        .merch-link {
+            font-size: 24px;
+            color: #fff;
+            text-decoration: none;
+            background-color: #ff00ff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .merch-link:hover {
+            background-color: #00ffff;
+            transform: scale(1.1);
+        }
+        .game-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
         }
         #pongCanvas {
-            border: 2px solid #333;
-            background-color: #000;
+            border: 2px solid #fff;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .cube-container {
             perspective: 1000px;
             width: 100px;
             height: 100px;
-            margin: 2rem auto;
         }
         .cube {
             width: 100%;
@@ -103,21 +86,20 @@
             position: relative;
             transform-style: preserve-3d;
             transform: translateZ(-50px);
-            transition: transform 1s;
-        }
-        .cube.spinning {
-            animation: spin 5s infinite linear;
+            animation: spin 10s infinite linear;
         }
         .cube div {
             position: absolute;
             width: 100px;
             height: 100px;
-            border: 2px solid #000;
+            border: 2px solid #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
         }
         .front  { transform: rotateY(0deg) translateZ(50px); }
         .back   { transform: rotateY(180deg) translateZ(50px); }
@@ -129,77 +111,59 @@
             0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
         }
-        footer {
-            background-color: #222;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-        }
     </style>
 </head>
 <body>
-    <nav class="nav-bar">
-        <div class="logo">Waefre Beorn's Merch Store</div>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="https://beaec8-2.myshopify.com/">Shop</a></li>
-        </ul>
-    </nav>
-
-    <div class="marquee">
-        <div class="marquee-content">
-            Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH
-        </div>
-    </div>
-
-    <main class="main-content">
-        <section class="hero">
-            <h1>Welcome to Waefre Beorn's Merch Store</h1>
-            <p>Discover unique MANGAMER merchandise!</p>
-        </section>
-
-        <section class="controls">
-            <input type="number" id="fontSizeInput" placeholder="Font size">
-            <button id="setFontSize">Set Font Size</button>
-            <button id="toggleBold">Toggle Bold</button>
-        </section>
-
-        <section class="game-container">
-            <canvas id="pongCanvas" width="600" height="400"></canvas>
-            <button id="startAnimation">Start Duck Animation</button>
-        </section>
-
-        <div class="cube-container">
-            <div id="duckCube" class="cube">
-                <div class="front">🦆</div>
-                <div class="back">🦆</div>
-                <div class="right">🦆</div>
-                <div class="left">🦆</div>
-                <div class="top">🦆</div>
-                <div class="bottom">🦆</div>
+    <div id="youtube-background"></div>
+    <div class="content">
+        <h1 class="glitter-text">Waefre Beorn's Duck Emporium</h1>
+        <a href="https://beaec8-2.myshopify.com/" class="merch-link" target="_blank">🦆 BUY MANGAMER MERCH 🦆</a>
+        <div class="game-container">
+            <canvas id="pongCanvas" width="400" height="300"></canvas>
+            <div class="cube-container">
+                <div id="duckCube" class="cube">
+                    <div class="front"></div>
+                    <div class="back"></div>
+                    <div class="right"></div>
+                    <div class="left"></div>
+                    <div class="top"></div>
+                    <div class="bottom"></div>
+                </div>
             </div>
         </div>
-    </main>
+        <button id="playButton">QUACK!</button>
+    </div>
 
-    <footer>
-        <p>&copy; 2024 Waefre Beorn's Merch Store</p>
-    </footer>
-
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="duck.js"></script>
+    <script src="quack.js"></script>
     <script>
-        // Font size and bold toggle functionality
-        document.getElementById('setFontSize').addEventListener('click', () => {
-            const fontSize = document.getElementById('fontSizeInput').value;
-            if (fontSize) {
-                document.body.style.fontSize = `${fontSize}px`;
-            }
-        });
+        // YouTube background
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-background', {
+                videoId: 'MtN1YnoL46Q', // The Duck Song
+                playerVars: {
+                    autoplay: 1,
+                    loop: 1,
+                    controls: 0,
+                    showinfo: 0,
+                    autohide: 1,
+                    modestbranding: 1,
+                    vq: 'hd1080'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
 
-        document.getElementById('toggleBold').addEventListener('click', () => {
-            document.body.style.fontWeight = document.body.style.fontWeight === 'bold' ? 'normal' : 'bold';
-        });
+        function onPlayerReady(event) {
+            event.target.mute();
+            event.target.playVideo();
+        }
 
-        // Pong game implementation
+        // Pong game
         const canvas = document.getElementById('pongCanvas');
         const ctx = canvas.getContext('2d');
         let ballX = canvas.width / 2;
@@ -216,11 +180,10 @@
             ctx.fillRect(x, y, width, height);
         }
 
-        function drawCircle(x, y, radius, color) {
-            ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2, true);
-            ctx.fill();
+        function drawDuck(x, y) {
+            const duckImg = new Image();
+            duckImg.src = duckOpen;
+            ctx.drawImage(duckImg, x - 10, y - 10, 20, 20);
         }
 
         function movePaddles() {
@@ -232,11 +195,17 @@
             ballX += ballSpeedX;
             ballY += ballSpeedY;
 
-            if (ballY < 0 || ballY > canvas.height) ballSpeedY = -ballSpeedY;
+            if (ballY < 0 || ballY > canvas.height) {
+                ballSpeedY = -ballSpeedY;
+                toggleDuckImage();
+                playQuack();
+            }
 
             if (ballX < paddleWidth) {
                 if (ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
+                    toggleDuckImage();
+                    playQuack();
                 } else {
                     ballX = canvas.width / 2;
                     ballY = canvas.height / 2;
@@ -246,6 +215,8 @@
             if (ballX > canvas.width - paddleWidth) {
                 if (ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
+                    toggleDuckImage();
+                    playQuack();
                 } else {
                     ballX = canvas.width / 2;
                     ballY = canvas.height / 2;
@@ -256,10 +227,10 @@
         }
 
         function drawGame() {
-            drawRect(0, 0, canvas.width, canvas.height, '#000');
+            drawRect(0, 0, canvas.width, canvas.height, 'rgba(0,0,0,0.5)');
             drawRect(0, paddle1Y, paddleWidth, paddleHeight, '#fff');
             drawRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight, '#fff');
-            drawCircle(ballX, ballY, 10, '#fff');
+            drawDuck(ballX, ballY);
         }
 
         function gameLoop() {
@@ -270,33 +241,17 @@
 
         gameLoop();
 
-        // Duck animation
-        let duckAnimationInterval;
-        document.getElementById('startAnimation').addEventListener('click', () => {
-            const cube = document.getElementById('duckCube');
-            if (cube.classList.contains('spinning')) {
-                cube.classList.remove('spinning');
-                clearInterval(duckAnimationInterval);
-                document.getElementById('startAnimation').textContent = 'Start Duck Animation';
-            } else {
-                cube.classList.add('spinning');
-                duckAnimationInterval = setInterval(() => {
-                    const faces = cube.children;
-                    for (let face of faces) {
-                        face.textContent = face.textContent === '🦆' ? '🦆' : '🦆';
-                    }
-                }, 1000);
-                document.getElementById('startAnimation').textContent = 'Stop Duck Animation';
-            }
+        // Initialize duck images on cube
+        const cubeFaces = document.querySelectorAll('.cube div');
+        cubeFaces.forEach(face => {
+            face.style.backgroundImage = `url("${duckClosed}")`;
         });
 
-        // Quack sound (simulated)
-        function playQuack() {
-            console.log("Quack!");
-            // In a real implementation, you would play the audio here
-        }
+        // Start duck animation
+        setInterval(toggleDuckImage, 1000);
 
-        document.getElementById('duckCube').addEventListener('click', playQuack);
+        // Quack button
+        document.getElementById('playButton').addEventListener('click', playQuack);
     </script>
 </body>
 </html>
