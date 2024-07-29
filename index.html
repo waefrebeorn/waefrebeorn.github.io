@@ -1,56 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Waefre Beorn's Merch Store</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="pong.js"></script>
-  <script src="duck.js"></script>
-  <script src="quack.js"></script>
-  <script src="wacky.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waefre Beorn's Merch Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f9;
+        }
+        .nav-bar {
+            background-color: #222;
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin-left: 1rem;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .marquee {
+            background-color: #444;
+            color: #fff;
+            padding: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .marquee-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .hero {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .controls input, .controls button {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #pongCanvas {
+            border: 2px solid #333;
+            background-color: #000;
+        }
+        .cube-container {
+            perspective: 1000px;
+            width: 100px;
+            height: 100px;
+            margin: 2rem auto;
+        }
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: translateZ(-50px);
+            transition: transform 1s;
+        }
+        .cube.spinning {
+            animation: spin 5s infinite linear;
+        }
+        .cube div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .front  { transform: rotateY(0deg) translateZ(50px); }
+        .back   { transform: rotateY(180deg) translateZ(50px); }
+        .right  { transform: rotateY(90deg) translateZ(50px); }
+        .left   { transform: rotateY(-90deg) translateZ(50px); }
+        .top    { transform: rotateX(90deg) translateZ(50px); }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); }
+        @keyframes spin {
+            0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
+            100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
+        }
+        footer {
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="nav-bar">
-      <div class="logo">Waefre Beorn's Merch Store</div>
-      <nav>
-        <ul>
-          <li><a href="#">Home</a></li>
-          <li><a href="https://beaec8-2.myshopify.com/">Shop</a></li>
+    <nav class="nav-bar">
+        <div class="logo">Waefre Beorn's Merch Store</div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="https://beaec8-2.myshopify.com/">Shop</a></li>
         </ul>
-      </nav>
+    </nav>
+
+    <div class="marquee">
+        <div class="marquee-content">
+            Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH
+        </div>
     </div>
-    <div class="marquee">Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH Buy MANGAMER MERCH</div>
-  </header>
-  <main>
-    <section class="hero">
-      <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/geAlLtiUAxY?si=szlD3ismEpZbUz__&start=7&autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </section>
-    <section class="controls">
-      <div id="textbox">
-        <input type="number" id="fontSizeInput" placeholder="Enter font size..." />
-        <button onclick="setFontSize()">Set Font Size</button>
-        <button onclick="toggleBold()">Bold</button>
-      </div>
-    </section>
-    <section class="animation">
-      <div class="cube" id="duckCube">
-        <div class="front"></div>
-        <div class="back"></div>
-        <div class="left"></div>
-        <div class="right"></div>
-        <div class="top"></div>
-        <div class="bottom"></div>
-      </div>
-    </section>
-    <section class="game">
-      <canvas id="pong-game" width="800" height="600"></canvas>
-      <button id="start-duck-animation">Start Duck Animation</button>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2024 Waefre Beorn's Merch Store</p>
-  </footer>
+
+    <main class="main-content">
+        <section class="hero">
+            <h1>Welcome to Waefre Beorn's Merch Store</h1>
+            <p>Discover unique MANGAMER merchandise!</p>
+        </section>
+
+        <section class="controls">
+            <input type="number" id="fontSizeInput" placeholder="Font size">
+            <button id="setFontSize">Set Font Size</button>
+            <button id="toggleBold">Toggle Bold</button>
+        </section>
+
+        <section class="game-container">
+            <canvas id="pongCanvas" width="600" height="400"></canvas>
+            <button id="startAnimation">Start Duck Animation</button>
+        </section>
+
+        <div class="cube-container">
+            <div id="duckCube" class="cube">
+                <div class="front">🦆</div>
+                <div class="back">🦆</div>
+                <div class="right">🦆</div>
+                <div class="left">🦆</div>
+                <div class="top">🦆</div>
+                <div class="bottom">🦆</div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Waefre Beorn's Merch Store</p>
+    </footer>
+
+    <script>
+        // Font size and bold toggle functionality
+        document.getElementById('setFontSize').addEventListener('click', () => {
+            const fontSize = document.getElementById('fontSizeInput').value;
+            if (fontSize) {
+                document.body.style.fontSize = `${fontSize}px`;
+            }
+        });
+
+        document.getElementById('toggleBold').addEventListener('click', () => {
+            document.body.style.fontWeight = document.body.style.fontWeight === 'bold' ? 'normal' : 'bold';
+        });
+
+        // Pong game implementation
+        const canvas = document.getElementById('pongCanvas');
+        const ctx = canvas.getContext('2d');
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballSpeedX = 5;
+        let ballSpeedY = 5;
+        let paddle1Y = canvas.height / 2 - 50;
+        let paddle2Y = canvas.height / 2 - 50;
+        const paddleHeight = 100;
+        const paddleWidth = 10;
+
+        function drawRect(x, y, width, height, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+        }
+
+        function drawCircle(x, y, radius, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+            ctx.fill();
+        }
+
+        function movePaddles() {
+            paddle1Y = Math.max(0, Math.min(canvas.height - paddleHeight, ballY - paddleHeight / 2));
+            paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, ballY - paddleHeight / 2));
+        }
+
+        function updateGame() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            if (ballY < 0 || ballY > canvas.height) ballSpeedY = -ballSpeedY;
+
+            if (ballX < paddleWidth) {
+                if (ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                } else {
+                    ballX = canvas.width / 2;
+                    ballY = canvas.height / 2;
+                }
+            }
+
+            if (ballX > canvas.width - paddleWidth) {
+                if (ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
+                    ballSpeedX = -ballSpeedX;
+                } else {
+                    ballX = canvas.width / 2;
+                    ballY = canvas.height / 2;
+                }
+            }
+
+            movePaddles();
+        }
+
+        function drawGame() {
+            drawRect(0, 0, canvas.width, canvas.height, '#000');
+            drawRect(0, paddle1Y, paddleWidth, paddleHeight, '#fff');
+            drawRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight, '#fff');
+            drawCircle(ballX, ballY, 10, '#fff');
+        }
+
+        function gameLoop() {
+            updateGame();
+            drawGame();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+
+        // Duck animation
+        let duckAnimationInterval;
+        document.getElementById('startAnimation').addEventListener('click', () => {
+            const cube = document.getElementById('duckCube');
+            if (cube.classList.contains('spinning')) {
+                cube.classList.remove('spinning');
+                clearInterval(duckAnimationInterval);
+                document.getElementById('startAnimation').textContent = 'Start Duck Animation';
+            } else {
+                cube.classList.add('spinning');
+                duckAnimationInterval = setInterval(() => {
+                    const faces = cube.children;
+                    for (let face of faces) {
+                        face.textContent = face.textContent === '🦆' ? '🦆' : '🦆';
+                    }
+                }, 1000);
+                document.getElementById('startAnimation').textContent = 'Stop Duck Animation';
+            }
+        });
+
+        // Quack sound (simulated)
+        function playQuack() {
+            console.log("Quack!");
+            // In a real implementation, you would play the audio here
+        }
+
+        document.getElementById('duckCube').addEventListener('click', playQuack);
+    </script>
 </body>
 </html>
