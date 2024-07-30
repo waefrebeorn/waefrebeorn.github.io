@@ -113,7 +113,7 @@
             0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
         }
-        #playButton {
+        #playButton, #soundButton {
             font-size: 20px;
             padding: 10px 20px;
             background-color: #ffff00;
@@ -122,8 +122,9 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin: 10px;
         }
-        #playButton:hover {
+        #playButton:hover, #soundButton:hover {
             background-color: #00ffff;
             transform: scale(1.1);
         }
@@ -147,7 +148,8 @@
                 </div>
             </div>
         </div>
-        <button id="playButton">QUACK!</button>
+        <button id="playButton">Quack: ON</button>
+        <button id="soundButton">Video Sound: OFF</button>
     </div>
 
     <script src="duck.js"></script>
@@ -159,6 +161,9 @@
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         let player;
+        let isVideoSoundOn = false;
+        let isQuackEnabled = true;
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('video-background', {
                 videoId: 'geAlLtiUAxY',
@@ -170,7 +175,7 @@
                     autohide: 1,
                     modestbranding: 1,
                     vq: 'hd1080',
-                    mute: 0
+                    mute: 1
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -190,6 +195,18 @@
                 player.playVideo();
             }
         }
+
+        document.getElementById('soundButton').addEventListener('click', () => {
+            isVideoSoundOn = !isVideoSoundOn;
+            if (isVideoSoundOn) {
+                player.unMute();
+                player.seekTo(0);
+                document.getElementById('soundButton').textContent = 'Video Sound: ON';
+            } else {
+                player.mute();
+                document.getElementById('soundButton').textContent = 'Video Sound: OFF';
+            }
+        });
 
         // Pong game
         const canvas = document.getElementById('pongCanvas');
@@ -303,12 +320,17 @@
 
         // Quack sound
         function playQuack() {
-            const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
-            quackSound.play();
+            if (isQuackEnabled) {
+                const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
+                quackSound.play();
+            }
         }
 
         // Quack button
-        document.getElementById('playButton').addEventListener('click', playQuack);
+        document.getElementById('playButton').addEventListener('click', () => {
+            isQuackEnabled = !isQuackEnabled;
+            document.getElementById('playButton').textContent = isQuackEnabled ? 'Quack: ON' : 'Quack: OFF';
+        });
     </script>
 </body>
 </html>
