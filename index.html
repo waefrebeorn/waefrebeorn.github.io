@@ -36,6 +36,7 @@
             align-items: center;
             padding: 20px;
             height: 100vh;
+            background-color: rgba(0, 0, 0, 0.6);
         }
         .glitter-text {
             font-size: 48px;
@@ -68,6 +69,7 @@
         .game-container {
             display: flex;
             justify-content: space-around;
+            align-items: center;
             width: 100%;
             margin-bottom: 20px;
         }
@@ -110,6 +112,20 @@
         @keyframes spin {
             0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
+        }
+        #playButton {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #ffff00;
+            color: #000;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #playButton:hover {
+            background-color: #00ffff;
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -160,6 +176,8 @@
 
         function onPlayerReady(event) {
             event.target.playVideo();
+            event.target.setVolume(50); // Set volume to 50%
+            event.target.unMute(); // Ensure the video is not muted
         }
 
         // Pong game
@@ -173,6 +191,7 @@
         let paddle2Y = canvas.height / 2 - 50;
         const paddleHeight = 100;
         const paddleWidth = 10;
+        const ballSize = 20;
 
         function drawRect(x, y, width, height, color) {
             ctx.fillStyle = color;
@@ -182,12 +201,25 @@
         function drawDuck(x, y) {
             const duckImg = new Image();
             duckImg.src = duckOpen;
-            ctx.drawImage(duckImg, x - 10, y - 10, 20, 20);
+            ctx.drawImage(duckImg, x - ballSize/2, y - ballSize/2, ballSize, ballSize);
         }
 
         function movePaddles() {
-            paddle1Y = Math.max(0, Math.min(canvas.height - paddleHeight, ballY - paddleHeight / 2));
-            paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, ballY - paddleHeight / 2));
+            const paddleSpeed = 6;
+            if (paddle1Y + paddleHeight / 2 < ballY) {
+                paddle1Y += paddleSpeed;
+            } else if (paddle1Y + paddleHeight / 2 > ballY) {
+                paddle1Y -= paddleSpeed;
+            }
+
+            if (paddle2Y + paddleHeight / 2 < ballY) {
+                paddle2Y += paddleSpeed;
+            } else if (paddle2Y + paddleHeight / 2 > ballY) {
+                paddle2Y -= paddleSpeed;
+            }
+
+            paddle1Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle1Y));
+            paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle2Y));
         }
 
         function resetBall() {
@@ -201,28 +233,35 @@
             ballX += ballSpeedX;
             ballY += ballSpeedY;
 
-            if (ballY < 0 || ballY > canvas.height) {
+            // Top and bottom walls
+            if (ballY - ballSize/2 < 0 || ballY + ballSize/2 > canvas.height) {
                 ballSpeedY = -ballSpeedY;
                 toggleDuckImage();
                 playQuack();
             }
 
-            if (ballX < paddleWidth) {
+            // Left paddle
+            if (ballX - ballSize/2 < paddleWidth) {
                 if (ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
+                    let deltaY = ballY - (paddle1Y + paddleHeight/2);
+                    ballSpeedY = deltaY * 0.35;
                     toggleDuckImage();
                     playQuack();
-                } else {
+                } else if (ballX < 0) {
                     resetBall();
                 }
             }
 
-            if (ballX > canvas.width - paddleWidth) {
+            // Right paddle
+            if (ballX + ballSize/2 > canvas.width - paddleWidth) {
                 if (ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
                     ballSpeedX = -ballSpeedX;
+                    let deltaY = ballY - (paddle2Y + paddleHeight/2);
+                    ballSpeedY = deltaY * 0.35;
                     toggleDuckImage();
                     playQuack();
-                } else {
+                } else if (ballX > canvas.width) {
                     resetBall();
                 }
             }
