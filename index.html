@@ -14,7 +14,7 @@
             font-family: "Comic Sans MS", cursive, sans-serif;
             color: #fff;
             background-color: #000;
-            overflow: hidden;
+            overflow-x: hidden;
         }
         #video-background {
             position: fixed;
@@ -35,11 +35,11 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            height: 100vh;
+            min-height: 100vh;
             background-color: rgba(0, 0, 0, 0.6);
         }
         .glitter-text {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
@@ -53,7 +53,7 @@
             100% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
         }
         .merch-link {
-            font-size: 24px;
+            font-size: 18px;
             color: #fff;
             text-decoration: none;
             background-color: #ff00ff;
@@ -68,7 +68,7 @@
         }
         .game-container {
             display: flex;
-            justify-content: space-around;
+            flex-direction: column;
             align-items: center;
             width: 100%;
             margin-bottom: 20px;
@@ -76,11 +76,14 @@
         #pongCanvas {
             border: 2px solid #fff;
             background-color: rgba(0, 0, 0, 0.5);
+            max-width: 100%;
+            height: auto;
         }
         .cube-container {
             perspective: 1000px;
             width: 100px;
             height: 100px;
+            margin-top: 20px;
         }
         .cube {
             width: 100%;
@@ -114,7 +117,7 @@
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
         }
         #playButton, #soundButton {
-            font-size: 20px;
+            font-size: 16px;
             padding: 10px 20px;
             background-color: #ffff00;
             color: #000;
@@ -127,6 +130,31 @@
         #playButton:hover, #soundButton:hover {
             background-color: #00ffff;
             transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .glitter-text {
+                font-size: 24px;
+            }
+            .merch-link {
+                font-size: 16px;
+            }
+            #pongCanvas {
+                width: 100%;
+                height: auto;
+            }
+            .cube-container {
+                width: 80px;
+                height: 80px;
+            }
+            .cube div {
+                width: 80px;
+                height: 80px;
+            }
+            #playButton, #soundButton {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
@@ -319,9 +347,9 @@
         setInterval(toggleDuckImage, 1000);
 
         // Quack sound
+        const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
         function playQuack() {
             if (isQuackEnabled) {
-                const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
                 quackSound.play();
             }
         }
@@ -331,6 +359,20 @@
             isQuackEnabled = !isQuackEnabled;
             document.getElementById('playButton').textContent = isQuackEnabled ? 'Quack: ON' : 'Quack: OFF';
         });
+
+        // Make canvas responsive
+        function resizeCanvas() {
+            const canvas = document.getElementById('pongCanvas');
+            const container = canvas.parentElement;
+            const ratio = canvas.width / canvas.height;
+            const newWidth = Math.min(container.clientWidth, 400);
+            canvas.style.width = newWidth + 'px';
+            canvas.style.height = (newWidth / ratio) + 'px';
+        }
+
+        // Call resizeCanvas on window resize and initially
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
     </script>
 </body>
 </html>
