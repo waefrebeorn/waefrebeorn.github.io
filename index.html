@@ -16,17 +16,17 @@
             background-color: #000;
             overflow: hidden;
         }
-        #youtube-background {
+        #video-background {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            right: 0;
+            bottom: 0;
             min-width: 100%;
             min-height: 100%;
             width: auto;
             height: auto;
-            transform: translateX(-50%) translateY(-50%);
             z-index: -1000;
-            overflow: hidden;
+            background: url('https://img.youtube.com/vi/geAlLtiUAxY/maxresdefault.jpg') no-repeat center center;
+            background-size: cover;
         }
         .content {
             position: relative;
@@ -130,7 +130,7 @@
     </style>
 </head>
 <body>
-    <div id="youtube-background"></div>
+    <div id="video-background"></div>
     <div class="content">
         <h1 class="glitter-text">Waefre Beorn's Duck Emporium</h1>
         <a href="https://beaec8-2.myshopify.com/" class="merch-link" target="_blank">🦆 BUY MANGAMER MERCH 🦆</a>
@@ -150,14 +150,17 @@
         <button id="playButton">QUACK!</button>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="duck.js"></script>
-    <script src="quack.js"></script>
     <script>
-        // YouTube background
+        // Creative YouTube workaround
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
         let player;
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-background', {
+            player = new YT.Player('video-background', {
                 videoId: 'geAlLtiUAxY',
                 playerVars: {
                     autoplay: 1,
@@ -166,18 +169,26 @@
                     showinfo: 0,
                     autohide: 1,
                     modestbranding: 1,
-                    vq: 'hd1080'
+                    vq: 'hd1080',
+                    mute: 0
                 },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
 
         function onPlayerReady(event) {
             event.target.playVideo();
-            event.target.setVolume(50); // Set volume to 50%
-            event.target.unMute(); // Ensure the video is not muted
+            event.target.setVolume(50);
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.ENDED) {
+                player.seekTo(0);
+                player.playVideo();
+            }
         }
 
         // Pong game
@@ -236,7 +247,6 @@
             // Top and bottom walls
             if (ballY - ballSize/2 < 0 || ballY + ballSize/2 > canvas.height) {
                 ballSpeedY = -ballSpeedY;
-                toggleDuckImage();
                 playQuack();
             }
 
@@ -246,7 +256,6 @@
                     ballSpeedX = -ballSpeedX;
                     let deltaY = ballY - (paddle1Y + paddleHeight/2);
                     ballSpeedY = deltaY * 0.35;
-                    toggleDuckImage();
                     playQuack();
                 } else if (ballX < 0) {
                     resetBall();
@@ -259,7 +268,6 @@
                     ballSpeedX = -ballSpeedX;
                     let deltaY = ballY - (paddle2Y + paddleHeight/2);
                     ballSpeedY = deltaY * 0.35;
-                    toggleDuckImage();
                     playQuack();
                 } else if (ballX > canvas.width) {
                     resetBall();
@@ -292,6 +300,12 @@
 
         // Start duck animation
         setInterval(toggleDuckImage, 1000);
+
+        // Quack sound
+        function playQuack() {
+            const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
+            quackSound.play();
+        }
 
         // Quack button
         document.getElementById('playButton').addEventListener('click', playQuack);
