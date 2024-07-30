@@ -142,7 +142,7 @@
         let player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-background', {
-                videoId: 'MtN1YnoL46Q', // The Duck Song
+                videoId: 'geAlLtiUAxY',
                 playerVars: {
                     autoplay: 1,
                     loop: 1,
@@ -159,7 +159,6 @@
         }
 
         function onPlayerReady(event) {
-            event.target.mute();
             event.target.playVideo();
         }
 
@@ -191,6 +190,13 @@
             paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, ballY - paddleHeight / 2));
         }
 
+        function resetBall() {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+            ballSpeedX = -ballSpeedX;
+            ballSpeedY = 5 * (Math.random() > 0.5 ? 1 : -1);
+        }
+
         function updateGame() {
             ballX += ballSpeedX;
             ballY += ballSpeedY;
@@ -207,8 +213,7 @@
                     toggleDuckImage();
                     playQuack();
                 } else {
-                    ballX = canvas.width / 2;
-                    ballY = canvas.height / 2;
+                    resetBall();
                 }
             }
 
@@ -218,8 +223,7 @@
                     toggleDuckImage();
                     playQuack();
                 } else {
-                    ballX = canvas.width / 2;
-                    ballY = canvas.height / 2;
+                    resetBall();
                 }
             }
 
