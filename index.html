@@ -223,20 +223,109 @@
         #loadGameButton:hover { background-color: #00dddd; }
         #resetGameButton:hover { background-color: #dd0000; }
 
+        #rebirthSection {
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        #rebirthButton:disabled { /* This style might be overridden by inline display:none in JS */
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #goldenFeatherUpgradesSection {
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        #goldenFeatherUpgradesSection h3 {
+            color: #ffc107;
+            border-bottom-color: #ffc107;
+        }
+        #gfUpgradesListContainer {
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .gf-upgrade-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(30, 30, 0, 0.6);
+            border-radius: 6px;
+            border: 1px solid #8c6d00;
+            text-align: left;
+        }
+        .gf-upgrade-item h4 {
+            font-size: 19px;
+            color: #ffd700;
+            margin-bottom: 7px;
+        }
+        .gf-upgrade-item p {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #eee;
+        }
+        .buy-gf-upgrade {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            font-size: 14px;
+            padding: 7px 12px;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+            margin-top: 8px;
+            background-color: #b8860b;
+            color: #fff;
+            display: block;
+            width: 100%;
+        }
+        .buy-gf-upgrade:hover {
+            background-color: #daa520;
+            transform: scale(1.03);
+        }
+        .buy-gf-upgrade:disabled {
+            background-color: #555;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
         /* Scrollbar styling for webkit browsers (optional enhancement) */
-        #generatorsListContainer::-webkit-scrollbar, #upgradesListContainer::-webkit-scrollbar {
+        #generatorsListContainer::-webkit-scrollbar, #upgradesListContainer::-webkit-scrollbar, #gfUpgradesListContainer::-webkit-scrollbar {
             width: 8px;
         }
-        #generatorsListContainer::-webkit-scrollbar-track, #upgradesListContainer::-webkit-scrollbar-track {
+        #generatorsListContainer::-webkit-scrollbar-track, #upgradesListContainer::-webkit-scrollbar-track, #gfUpgradesListContainer::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.2);
             border-radius: 4px;
         }
-        #generatorsListContainer::-webkit-scrollbar-thumb, #upgradesListContainer::-webkit-scrollbar-thumb {
+        #generatorsListContainer::-webkit-scrollbar-thumb, #upgradesListContainer::-webkit-scrollbar-thumb, #gfUpgradesListContainer::-webkit-scrollbar-thumb {
             background-color: #ffff00;
             border-radius: 4px;
         }
-        #generatorsListContainer::-webkit-scrollbar-thumb:hover, #upgradesListContainer::-webkit-scrollbar-thumb:hover {
+        #generatorsListContainer::-webkit-scrollbar-thumb:hover, #upgradesListContainer::-webkit-scrollbar-thumb:hover, #gfUpgradesListContainer::-webkit-scrollbar-thumb:hover {
             background-color: #ffdd00;
+        }
+
+        #ascendToHeavenButton:hover {
+            background-color: #87ceeb; /* Sky blue */
+        }
+        #superLevelDisplayArea {
+            box-shadow: 0 0 15px rgba(221,160,221, 0.5);
+        }
+
+        .social-link {
+            padding: 8px 12px;
+            border: 1px solid #00ffff;
+            border-radius: 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: inline-block; /* Added for better spacing and padding application */
+            margin-bottom: 10px; /* Added for spacing on smaller screens when they wrap */
+        }
+        .social-link:hover {
+            background-color: #00ffff;
+            color: #000;
+            text-decoration: none;
+        }
+        #wubuSphereVisualizer iframe {
+            /* Styles already applied via inline, max-width for responsiveness is good. */
+            /* Additional shadow could be added if desired */
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
         }
 
         .game-container {
@@ -361,6 +450,8 @@
                 <p style="font-size: 24px; margin-bottom: 5px; color: #ff00ff;">Quack Points (QP): <span id="qpAmount">0</span></p>
                 <p style="font-size: 16px; margin-bottom: 5px; color: #00ffff;">QP per second: <span id="qpPerSecond">0</span></p>
                 <p style="font-size: 16px; margin-bottom: 15px; color: #00ffff;">QP per click: <span id="qpPerClick">1</span></p>
+                <p style="font-size: 18px; margin-top: 10px; color: #90ee90;">Level: <span id="playerLevelDisplay" style="font-weight: bold;">0</span></p>
+                <p style="font-size: 14px; color: #90ee90;">Next Level at: <span id="nextLevelQPDisplay">---</span> QP</p>
             </div>
 
             <!-- Game Sections Wrapper (for potential flex layout) -->
@@ -398,7 +489,30 @@
                     </div>
                 </div>
 
+                <!-- Golden Feather Upgrades Section -->
+                <div id="goldenFeatherUpgradesSection" style="min-width: 280px; flex-basis: 45%; margin: 10px; padding: 10px; background-color: rgba(255, 215, 0, 0.2); border-radius: 8px; border: 1px solid #ffd700;">
+                    <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px; border-bottom: 1px solid #ffd700; padding-bottom: 5px;">Golden Feather Blessings</h3>
+                    <div id="gfUpgradesListContainer">
+                        <!-- Golden Feather Upgrade items will be populated here by JavaScript -->
+                        <!-- Example:
+                        <div class="gf-upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.4); border-radius: 5px;">
+                            <h4 style="font-size: 18px; color: #ffd700;">Permanent Click Boost I</h4>
+                            <p style="font-size: 14px;">Effect: +1 QP per click (Permanent)</p>
+                            <p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">1</span> GF</p>
+                            <button class="buy-gf-upgrade" data-gf-upgrade-id="permClickBoost1">Buy with GF</button>
+                        </div>
+                        -->
+                    </div>
+                </div>
             </div> <!-- End of gameSectionsWrapper -->
+
+            <!-- Rebirth Section -->
+            <div id="rebirthSection" style="margin-top: 25px; padding: 15px; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; border-radius: 8px; text-align: center;">
+                <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px;">Rebirth & Golden Feathers</h3>
+                <p style="font-size: 18px;">Golden Feathers: <span id="goldenFeathersDisplay" style="font-weight: bold; color: #ffd700;">0</span></p>
+                <p style="font-size: 16px; margin-bottom:10px;">Rebirthing now will grant: <span id="gfOnRebirthDisplay" style="font-weight: bold; color: #ffd700;">0</span> Golden Feather(s).</p>
+                <button id="rebirthButton" style="font-size: 17px; padding: 10px 20px; background-color: #ffd700; color: #333; border: none; border-radius: 22px; cursor: pointer; display: none;">Rebirth for Golden Feathers</button>
+            </div>
 
             <!-- Save/Load Controls -->
             <div id="saveLoadControls" style="margin-top: 30px; padding: 10px; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
@@ -406,6 +520,15 @@
                 <button id="loadGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ffff; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Load Progress</button>
                 <button id="resetGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #ff0000; color: #fff; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Reset Game</button>
             </div>
+        </div>
+
+        <!-- Super Level Display Area -->
+        <div id="superLevelDisplayArea" style="display: none; margin-top: 20px; padding: 20px; border: 2px solid #dda0dd; border-radius: 10px; background-color: rgba(221,160,221, 0.1); text-align: center;">
+            <h2 id="superLevelTitle" class="glitter-text" style="color: #dda0dd;">Super Level Title</h2>
+            <div id="superLevelContent">
+                <!-- Content specific to the current super level will go here -->
+            </div>
+            <button id="returnToNormalPlaneButton" style="margin-top: 20px; font-size: 16px; padding: 10px 15px; background-color: #ccc; color: #000; border-radius: 20px;">Return to Mortal Ducks</button>
         </div>
 
         <div class="game-container" id="retroArcadeSection" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ffff00;">
@@ -422,6 +545,31 @@
                 <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Blockout (1989) - 3D Tetris</h3>
                 <iframe src="https://archive.org/embed/msdos_Blockout_1989" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
             </div>
+        </div>
+
+        <div id="socialAndConnectSection" style="margin-top: 40px; padding: 20px; background-color: rgba(50, 50, 50, 0.3); border-top: 2px solid #ffff00; text-align: center;">
+            <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 25px;">Connect With Waefre Beorn</h2>
+
+            <div id="socialLinks" style="margin-bottom: 30px;">
+                <a href="https://x.com/waefrebeorn" target="_blank" class="social-link" style="margin: 0 10px; text-decoration: none; color: #00ffff; font-size: 18px;">X (Twitter)</a>
+                <a href="https://github.com/waefrebeorn" target="_blank" class="social-link" style="margin: 0 10px; text-decoration: none; color: #00ffff; font-size: 18px;">GitHub</a>
+                <a href="https://www.youtube.com/@WuBuStreams" target="_blank" class="social-link" style="margin: 0 10px; text-decoration: none; color: #00ffff; font-size: 18px;">Twitch VODs (YouTube)</a>
+                <a href="http://youtube.com/WaefreBeorn" target="_blank" class="social-link" style="margin: 0 10px; text-decoration: none; color: #00ffff; font-size: 18px;">Main YouTube</a>
+                <a href="http://twitch.tv/WaefreBeorn" target="_blank" class="social-link" style="margin: 0 10px; text-decoration: none; color: #00ffff; font-size: 18px;">Twitch</a>
+            </div>
+
+            <div id="wubuSphereVisualizer">
+                <h3 style="font-size: 22px; color: #ff00ff; margin-bottom: 10px;">Wubu Sphere Visualizer</h3>
+                <p style="margin-bottom:10px;"><a href="https://wubu-sphere-visual.replit.app/" target="_blank" style="color: #ffff00;">Link to Wubu Sphere</a></p>
+                <iframe src="https://wubu-sphere-visual.replit.app/" width="700" height="500" frameborder="0" style="border:2px solid #ff00ff; border-radius:8px; max-width:100%;"></iframe>
+            </div>
+        </div>
+
+        <!-- Celestial Portal Section (for Super Levels) -->
+        <div id="celestialPortalSection" style="margin-top: 25px; padding: 15px; background-color: rgba(128, 0, 128, 0.1); border: 1px solid #800080; border-radius: 8px; text-align: center; display: none;"> <!-- Initially hidden -->
+            <h3 style="font-size: 22px; color: #da70d6; margin-bottom: 10px;">Celestial Portal</h3>
+            <button id="ascendToHeavenButton" style="font-size: 16px; padding: 10px 15px; background-color: #add8e6; color: #000; border: none; border-radius: 20px; cursor: pointer;">Ascend to Duck Heaven</button>
+            <!-- More buttons for Hell/Nexus can be added here later -->
         </div>
     </div>
 
