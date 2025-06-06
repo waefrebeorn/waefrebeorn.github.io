@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isClickerQuackEnabled = true;
     const clickerQuackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
     clickerQuackSound.preload = 'auto'; // Optional: helps ensure sound is ready
+    clickerQuackSound.load(); // Added line
 
     // DOM Elements
     const clickableDuckV2 = document.getElementById('clickableDuckV2');
@@ -495,22 +496,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for 'Q' key press
     document.addEventListener('keydown', (event) => {
         if (event.key === 'q' || event.key === 'Q') {
-            // Check if the Duck Clicker game tab is active
+            console.log("'Q' key pressed."); // Log key press
             const duckClickerTab = document.getElementById('duckClickerTab');
             if (duckClickerTab) {
                 const style = window.getComputedStyle(duckClickerTab);
+                console.log("Duck Clicker Tab display style:", style.display); // Log display style
                 if (style.display !== 'none') {
-                    manualClick(); // manualClick() already calls playQuackSound()
+                    console.log("Duck Clicker Tab is active, calling manualClick()."); // Log before calling manualClick
+                    manualClick();
+                } else {
+                    console.log("Duck Clicker Tab is NOT active.");
                 }
             } else {
-                // This case might occur if the HTML structure changes or ID is incorrect.
-                // For robustness, if 'duckClickerTab' isn't found, it implies a structural issue
-                // or the game isn't using tabs as expected.
-                // console.warn("'duckClickerTab' not found. 'Q' key press will not be restricted to active tab or may not work as intended.");
-                // As a fallback, if the primary game area is always somewhat available,
-                // and not strictly tied to tabs, one might call manualClick() here,
-                // but the requirement is to check if the game is "active".
-                // The current check for `duckClickerTab`'s display style is the best approach given the tab structure.
+                console.error("'duckClickerTab' element not found. 'Q' key press cannot determine active tab.");
             }
         }
     });
