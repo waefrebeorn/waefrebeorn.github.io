@@ -4,6 +4,39 @@ let allDuckemonData = {};  // Loaded from JSON
 let currentDuckemonState = {}; // Initialized after loading allDuckemonData
 var youtubeVideoIDs = []; // Global for access, populated after fetch
 
+// --- Duckemon Effect Constants ---
+const DUCKEMON_TYPE_COLORS = {
+    "Normal": "rgba(168, 168, 120, 0.7)", "Fighting": "rgba(192, 48, 40, 0.7)",
+    "Flying": "rgba(168, 144, 240, 0.7)", "PoisonBill": "rgba(160, 64, 160, 0.7)",
+    "GroundPuddle": "rgba(224, 192, 104, 0.7)", "Rock": "rgba(184, 160, 56, 0.7)",
+    "BugNet": "rgba(168, 184, 32, 0.7)", "Ghost": "rgba(112, 88, 152, 0.7)",
+    "Steel": "rgba(184, 184, 208, 0.7)", "FireBeak": "rgba(240, 128, 48, 0.7)",
+    "WaterWing": "rgba(104, 144, 240, 0.7)", "GrassPelt": "rgba(120, 200, 80, 0.7)",
+    "ElectricQuacker": "rgba(248, 208, 48, 0.7)", "ElectricWaddle": "rgba(248, 208, 48, 0.7)",
+    "Psychic": "rgba(248, 88, 136, 0.7)", "PsychicOrb": "rgba(248, 88, 136, 0.7)",
+    "IceAge": "rgba(152, 216, 216, 0.7)", "Dragon": "rgba(112, 56, 248, 0.7)",
+    "Dark": "rgba(112, 88, 72, 0.7)", "FairyDust": "rgba(238, 153, 172, 0.7)",
+    "Dimensional": "rgba(72, 56, 120, 0.7)", "Ancient": "rgba(104, 88, 56, 0.7)",
+    "AncientBeak": "rgba(104, 88, 56, 0.7)", "Digital": "rgba(0, 200, 160, 0.7)",
+    "Cosmic": "rgba(120, 100, 200, 0.7)", "Egg": "rgba(240, 240, 200, 0.7)",
+    "Void": "rgba(40, 40, 50, 0.85)", "Chad": "rgba(255, 215, 0, 0.7)",
+    "Poison": "rgba(160, 64, 160, 0.7)", "Electric": "rgba(248, 208, 48, 0.7)",
+    "Ground": "rgba(224, 192, 104, 0.7)",
+    "CyberneticPaddler": "rgba(128, 128, 192, 0.7)", "TimeGuard": "rgba(0, 192, 192, 0.7)",
+    "NuclearQuack": "rgba(128, 255, 0, 0.7)", "EnergyPulse": "rgba(255, 128, 0, 0.7)",
+    "Mystery": "rgba(100, 100, 100, 0.7)",
+    "default": "rgba(200, 200, 200, 0.5)"
+};
+
+const RARITY_GLOW_COLORS = {
+    T1: "rgba(120, 120, 120, 0.7)", // Common (subtle grey)
+    T2: "rgba(205, 127, 50, 0.7)",  // Uncommon (bronze)
+    T3: "rgba(192, 192, 192, 0.8)",  // Rare (silver)
+    T4: "rgba(255, 215, 0, 0.9)",    // Epic (gold)
+    T5: "rgba(176, 40, 255, 0.9)"    // Legendary (vibrant purple)
+};
+// --- End Duckemon Effect Constants ---
+
 // --- Upgrade Definitions ---
 const upgradeDefinitions = [
     {
@@ -15,7 +48,7 @@ const upgradeDefinitions = [
         target: "click", // 'click', 'all', or a specific duckemon ID
         multiplier: 1.5,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62962-anvil-icon.png"
+        icon: "duck_closed.png"
     },
     {
         id: "babyDucklingBoost1",
@@ -26,7 +59,7 @@ const upgradeDefinitions = [
         target: "babyDuckling", // Assuming 'babyDuckling' is an ID in allDuckemonData
         multiplier: 1.5,
         purchased: false,
-        icon: "duck.png"
+        icon: "duck_closed.png"
     },
     {
         id: "allQuackBoost1",
@@ -37,7 +70,7 @@ const upgradeDefinitions = [
         target: "all",
         multiplier: 1.2,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-people-bodyparts/48/11035-busts-in-silhouette-icon.png"
+        icon: "duck_closed.png"
     },
     {
         id: "qKeyAutoclickRate1",
@@ -48,7 +81,7 @@ const upgradeDefinitions = [
         target: "qKeyAutoclickRate",
         value: 5,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-activities/48/52700-stopwatch-icon.png"
+        icon: "duck_closed.png"
     },
     {
         id: "qKeyAutoclickRate2",
@@ -59,7 +92,7 @@ const upgradeDefinitions = [
         target: "qKeyAutoclickRate",
         value: 10,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-activities/48/52700-stopwatch-icon.png"
+        icon: "duck_closed.png"
     }
 ];
 
@@ -73,7 +106,7 @@ const gfUpgradeDefinitions = [
         target: "click",
         multiplier: 2,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62939-coin-icon.png"
+        icon: "duck_closed.png"
     },
     {
         id: "goldenAllQpsBoost1",
@@ -84,9 +117,149 @@ const gfUpgradeDefinitions = [
         target: "all",
         multiplier: 1.5,
         purchased: false,
-        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62941-money-bag-icon.png"
+        icon: "duck_closed.png"
     }
 ];
+
+// --- Recolor Image Function ---
+function recolorImage(imageUrl, color) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.crossOrigin = "Anonymous"; // Important for tainted canvas if image is hosted elsewhere
+
+        image.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = image.naturalWidth;
+            canvas.height = image.naturalHeight;
+
+            // Draw the original image
+            ctx.drawImage(image, 0, 0);
+
+            // Apply the color tint
+            ctx.globalCompositeOperation = 'source-in'; // Only draw where the original image has pixels
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Reset composite operation
+            ctx.globalCompositeOperation = 'source-over';
+
+            resolve(canvas.toDataURL()); // Returns base64 encoded image
+        };
+
+        image.onerror = (error) => {
+            console.error("Error loading image for recoloring:", imageUrl, error);
+            reject(error); // Or resolve(imageUrl) to return original on error
+        };
+
+        image.src = imageUrl;
+    });
+}
+// --- End Recolor Image Function ---
+
+// --- Duckemon Effects Function ---
+async function applyDuckemonEffects(baseImageUrl, duckemonData) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const glowOffset = 10; // Extra space for glows
+            canvas.width = img.naturalWidth + glowOffset * 2;
+            canvas.height = img.naturalHeight + glowOffset * 2;
+
+            // --- Start drawing effects ---
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 0. Determine Rarity Tier for border glow
+            let rarityColor = null;
+            if (duckemonData.baseCost >= 1E50) rarityColor = RARITY_GLOW_COLORS.T5;
+            else if (duckemonData.baseCost >= 1E15) rarityColor = RARITY_GLOW_COLORS.T4;
+            else if (duckemonData.baseCost >= 1000000) rarityColor = RARITY_GLOW_COLORS.T3;
+            else if (duckemonData.baseCost >= 10000) rarityColor = RARITY_GLOW_COLORS.T2;
+            // else Tier 1 (Common) - no special glow or very subtle one
+
+            // 1. Draw base image (centered with offset for glow)
+            // If rarity glow is applied, draw it first as a shadow
+            if (rarityColor) {
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.shadowBlur = glowOffset - 2; // Glow size
+                ctx.shadowColor = rarityColor;
+                // Draw the image multiple times for a stronger glow before the actual image
+                for (let i = 0; i < 3; i++) {
+                     ctx.drawImage(img, glowOffset, glowOffset, img.naturalWidth, img.naturalHeight);
+                }
+            }
+            // Reset shadow for subsequent draws
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
+
+            // Draw the actual base image on top
+            ctx.drawImage(img, glowOffset, glowOffset, img.naturalWidth, img.naturalHeight);
+
+            // 2. Apply Type1 color tint
+            const type1Color = DUCKEMON_TYPE_COLORS[duckemonData.type1] || DUCKEMON_TYPE_COLORS["default"];
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.fillStyle = type1Color;
+            ctx.fillRect(glowOffset, glowOffset, img.naturalWidth, img.naturalHeight); // Only tint the duck area
+            ctx.globalCompositeOperation = 'source-over'; // Reset
+
+            // 3. Apply Type2 outer glow (if type2 exists)
+            if (duckemonData.type2) {
+                const type2Color = DUCKEMON_TYPE_COLORS[duckemonData.type2] || null;
+                if (type2Color) {
+                    // Create a temporary canvas for the main duck image to apply glow around it
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = canvas.width;
+                    tempCanvas.height = canvas.height;
+
+                    // Draw the already colorized duck (from main canvas) to temp canvas
+                    tempCtx.drawImage(canvas, 0, 0);
+
+                    // Clear main canvas and draw glow from type2 color
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = glowOffset / 2;
+                    ctx.shadowColor = type2Color;
+                    // Draw the temp canvas (which has the duck) multiple times for glow
+                    for (let i = 0; i < 3; i++) {
+                        ctx.drawImage(tempCanvas, 0, 0);
+                    }
+                    // Reset shadow
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    ctx.shadowBlur = 0;
+                    ctx.shadowColor = 'transparent';
+                    // Draw the temp canvas (the colored duck) back on top of its glow
+                    ctx.drawImage(tempCanvas, 0, 0);
+                }
+            }
+
+            // 4. Evolution Indicator (if evolvesTo exists)
+            if (duckemonData.evolvesTo) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'; // Bright sparkle/arrow color
+                ctx.font = 'bold ' + (img.naturalHeight / 3) + 'px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText('↑', canvas.width - glowOffset /2 , canvas.height - glowOffset /2 ); // Bottom-right corner
+            }
+
+            resolve(canvas.toDataURL());
+        };
+        img.onerror = (err) => {
+            console.error("Error loading base image for Duckemon effect:", baseImageUrl, err);
+            reject(err); // Or resolve with baseImageUrl to use original if loading fails
+        };
+        img.src = baseImageUrl;
+    });
+}
+// --- End Duckemon Effects Function ---
 
 document.addEventListener('DOMContentLoaded', () => {
     // Define global variables to hold data from JSON
@@ -523,8 +696,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemDiv = document.createElement('div'); itemDiv.className = 'generator item';
             const nameDiv = document.createElement('div'); nameDiv.className = 'name';
             nameDiv.textContent = duckemon.name + (duckemon.owned > 0 ? ` (x${duckemon.owned})` : '');
-            const icon = document.createElement('img'); icon.src = duckemon.icon || 'duck_closed.png';
-            icon.alt = duckemon.name; icon.className = 'item-icon'; nameDiv.prepend(icon);
+            const iconEl = document.createElement('img'); // Renamed to iconEl
+            iconEl.alt = duckemon.name;
+            iconEl.className = 'item-icon';
+
+            applyDuckemonEffects('duck_closed.png', duckemon)
+                .then(dataUrl => {
+                    iconEl.src = dataUrl;
+                })
+                .catch(error => {
+                    console.error(`Error applying effects to Duckemon ${duckemon.id} in generator list:`, error);
+                    iconEl.src = 'duck_closed.png'; // Fallback
+                });
+            nameDiv.prepend(iconEl);
+
             const detailsDiv = document.createElement('div'); detailsDiv.className = 'details';
             const button = document.createElement('button'); button.textContent = 'Buy';
             button.onclick = () => buyDuckemon(duckemon.id);
@@ -899,14 +1084,59 @@ document.addEventListener('DOMContentLoaded', () => {
                 duckedexGrid.appendChild(entryDiv);
             }
             if (duckemon.isDiscovered) {
-                entryDiv.innerHTML = `
-                    <img src="${duckemon.icon || 'duck_closed.png'}" alt="${duckemon.name}" style="width: 50px; height: 50px; border: 1px solid #555; image-rendering: pixelated; background-color: #333; border-radius: 4px; margin-bottom: 5px;">
+                // Create placeholder for image element
+                const imgPlaceholder = document.createElement('div');
+                imgPlaceholder.style.width = '50px'; // Match expected image size
+                imgPlaceholder.style.height = '50px';
+                imgPlaceholder.style.display = 'inline-block'; // Or block with text-align center on parent
+                imgPlaceholder.style.border = '1px solid #555';
+                imgPlaceholder.style.backgroundColor = '#333';
+                imgPlaceholder.style.borderRadius = '4px';
+                imgPlaceholder.style.marginBottom = '5px';
+
+                entryDiv.innerHTML = ''; // Clear previous content before appending
+                entryDiv.appendChild(imgPlaceholder); // Add placeholder first
+
+                const iconImgEl = document.createElement('img');
+                iconImgEl.alt = duckemon.name;
+                iconImgEl.style.width = '50px';
+                iconImgEl.style.height = '50px';
+                // iconImgEl.style.border = '1px solid #555'; // Style applied by placeholder or entryDiv
+                iconImgEl.style.imageRendering = 'pixelated';
+                // iconImgEl.style.backgroundColor = '#333'; // Style applied by placeholder or entryDiv
+                iconImgEl.style.borderRadius = '4px';
+                iconImgEl.style.marginBottom = '5px';
+
+                applyDuckemonEffects('duck_closed.png', duckemon)
+                    .then(dataUrl => {
+                        iconImgEl.src = dataUrl;
+                        if(imgPlaceholder.parentNode === entryDiv) { // Check if placeholder is still there
+                           entryDiv.replaceChild(iconImgEl, imgPlaceholder);
+                        } else { // If placeholder was removed by other means, just append
+                           entryDiv.prepend(iconImgEl); // Or append, depending on desired order
+                        }
+                    })
+                    .catch(error => {
+                        console.error(`Error applying effects to Duckedex ${duckemon.id}:`, error);
+                        iconImgEl.src = 'duck_closed.png'; // Fallback
+                         if(imgPlaceholder.parentNode === entryDiv) {
+                           entryDiv.replaceChild(iconImgEl, imgPlaceholder);
+                        } else {
+                           entryDiv.prepend(iconImgEl);
+                        }
+                    });
+
+                const textContentDiv = document.createElement('div');
+                textContentDiv.innerHTML = `
                     <h5 style="font-size: 13px; color: #00cyan; margin: 5px 0 2px 0; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${duckemon.name}</h5>
                     <p style="font-size: 10px; color: #aaa; margin: 0;">${duckemon.type1 ? duckemon.type1 : ''}${duckemon.type2 ? ' / ' + duckemon.type2 : ''}</p>
                     <p style="font-size: 9px; color: #888; margin: 2px 0 0 0;">Owned: ${duckemon.owned}</p>`;
+                entryDiv.appendChild(textContentDiv);
+
                 entryDiv.style.cursor = 'pointer'; entryDiv.onclick = () => showDuckedexDetailModal(duckemon.id);
                 entryDiv.style.borderColor = duckemon.owned > 0 ? '#00ff00' : '#4a4a4a';
             } else {
+                // Undiscovered Duckemon logic remains the same
                 entryDiv.innerHTML = `
                     <img src="duck_closed.png" alt="Undiscovered" style="width: 50px; height: 50px; filter: brightness(0.15) grayscale(1); image-rendering: pixelated; margin-bottom: 5px;">
                     <h5 style="font-size: 13px; color: #555; margin: 5px 0 2px 0; font-weight: bold;">???</h5>
@@ -982,7 +1212,28 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderUpgrade(upgrade, container) {
             const itemDiv = document.createElement('div'); itemDiv.className = 'upgrade item'; itemDiv.id = upgrade.id;
             const nameDiv = document.createElement('div'); nameDiv.className = 'name'; nameDiv.textContent = upgrade.name;
-            const icon = document.createElement('img'); icon.src = upgrade.icon || 'duck_closed.png'; icon.alt = upgrade.name; icon.className = 'item-icon'; nameDiv.prepend(icon);
+            const iconEl = document.createElement('img'); // Renamed to iconEl to avoid conflict
+            iconEl.alt = upgrade.name;
+            iconEl.className = 'item-icon';
+
+            const quackEnhancementColor = 'rgba(0, 150, 255, 0.7)'; // Blue for QP upgrades
+            const goldenFeatherBlessingColor = 'rgba(255, 215, 0, 0.7)'; // Gold for GF upgrades
+
+            if (upgrade.icon === 'duck_closed.png') {
+                const colorToApply = upgrade.currency === 'gf' ? goldenFeatherBlessingColor : quackEnhancementColor;
+                recolorImage(upgrade.icon, colorToApply)
+                    .then(recoloredUrl => {
+                        iconEl.src = recoloredUrl;
+                    })
+                    .catch(error => {
+                        console.error("Failed to recolor upgrade icon:", upgrade.id, error);
+                        iconEl.src = upgrade.icon || 'duck_closed.png'; // Fallback to original
+                    });
+            } else {
+                iconEl.src = upgrade.icon || 'duck_closed.png'; // Use original icon if not duck_closed.png
+            }
+            nameDiv.prepend(iconEl);
+
             const detailsDiv = document.createElement('div'); detailsDiv.className = 'details';
             detailsDiv.innerHTML = `${upgrade.description} <br> Cost: ${formatNumber(upgrade.cost)} ${upgrade.currency === 'gf' ? 'GF' : 'QP'}`;
             const button = document.createElement('button'); button.textContent = 'Buy Upgrade';
