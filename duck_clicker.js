@@ -100,18 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const originalGeneratorDefinitions = {
-        babyDuckling: { name: 'Baby Duckling', description: 'A tiny, adorable source of passive quacks. Peep!', baseCost: 15, baseOutput: 0.1, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' },
-        breadScavenger: { name: 'Bread Scavenger', description: 'This duck knows where all the discarded bread is.', baseCost: 100, baseOutput: 1, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' },
-        keyboardWarrior: { name: 'Quack-Powered Keyboard Warrior', description: 'Aggressively quacks online, somehow generating QP.', baseCost: 1100, baseOutput: 8, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' },
-        duckArmyRecruit: { name: 'Duck Army Recruit', description: 'One of many. They march for QP.', baseCost: 12000, baseOutput: 47, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' },
-        memeAiDuck: { name: 'Meme-Generating AI Duck', description: 'This advanced AI churns out viral duck memes, and QP.', baseCost: 130000, baseOutput: 600, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' }, // Output: 260 -> 600
-        ducktopiaPortal: { name: 'Ducktopia Portal', description: 'Opens a rift to a dimension of pure quack energy.', baseCost: 1400000, baseOutput: 7000, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' }, // Output: 1400 -> 7000
-        gigachadDuck: { name: 'Gigachad Duck', description: 'This duck didn\'t skip beak day. Flexes for massive QP.', baseCost: 20000000, baseOutput: 100000, icon: typeof duckOpen !== 'undefined' ? duckOpen : '' }, // Output: 10k -> 100k
-        philosoRaptorDuck: { name: 'Philoso-Raptor Duck', description: 'Ponders the meaning of quack, accidentally discovers QP sources.', baseCost: 300000000, baseOutput: 1800000, icon: typeof duckClosed !== 'undefined' ? duckClosed : '' }, // Output: 150k -> 1.8M
-        ducktrixCodeStream: { name: 'Ducktrix Code Stream', description: 'It\'s all just falling green ducks... and QP.', baseCost: 5000000000, baseOutput: 30000000, icon: typeof duckOpen !== 'undefined' ? duckOpen : '' }, // Output: 2.2M -> 30M
-        cosmicDuckEgg: { name: 'Cosmic Duck Egg', description: 'An egg laid by a celestial duck. Radiates immense QP. Requires Level 8.', baseCost: 1e50, baseOutput: 1e45, icon: typeof duckOpen !== 'undefined' ? duckOpen : '', prerequisite: () => playerLevel >= 8 },
-        voidQuacker: { name: 'Void Quacker', description: 'Quacks from the void itself. Unsettling. Requires Level 15.', baseCost: 1e135, baseOutput: 1e125, icon: typeof duckClosed !== 'undefined' ? duckClosed : '', prerequisite: () => playerLevel >= 15 },
-        neuralNetDuck: { name: 'Neural Net Duck Assimilator', baseCost: 1e220, baseOutput: 1e218, description: 'A self-aware AI duck network that has begun to understand the underlying quack-fabric of reality. Requires Level 22.', icon: typeof duckOpen !== 'undefined' ? duckOpen : '', prerequisite: () => playerLevel >= 22 }
+        babyDuckling: { name: 'Baby Duckling', description: 'A tiny, adorable source of passive quacks. Peep!', baseCost: 15, baseOutput: 0.1, icon: 'duck_closed.png' },
+        breadScavenger: { name: 'Bread Scavenger', description: 'This duck knows where all the discarded bread is.', baseCost: 100, baseOutput: 1, icon: 'duck_closed.png' },
+        keyboardWarrior: { name: 'Quack-Powered Keyboard Warrior', description: 'Aggressively quacks online, somehow generating QP.', baseCost: 1100, baseOutput: 8, icon: 'duck_closed.png' },
+        duckArmyRecruit: { name: 'Duck Army Recruit', description: 'One of many. They march for QP.', baseCost: 12000, baseOutput: 47, icon: 'duck_closed.png' },
+        memeAiDuck: { name: 'Meme-Generating AI Duck', description: 'This advanced AI churns out viral duck memes, and QP.', baseCost: 130000, baseOutput: 600, icon: 'duck_closed.png' },
+        ducktopiaPortal: { name: 'Ducktopia Portal', description: 'Opens a rift to a dimension of pure quack energy.', baseCost: 1400000, baseOutput: 7000, icon: 'duck_closed.png' },
+        gigachadDuck: { name: 'Gigachad Duck', description: 'This duck didn\'t skip beak day. Flexes for massive QP.', baseCost: 20000000, baseOutput: 100000, icon: 'duck_open.png' },
+        philosoRaptorDuck: { name: 'Philoso-Raptor Duck', description: 'Ponders the meaning of quack, accidentally discovers QP sources.', baseCost: 300000000, baseOutput: 1800000, icon: 'duck_closed.png' },
+        ducktrixCodeStream: { name: 'Ducktrix Code Stream', description: 'It\'s all just falling green ducks... and QP.', baseCost: 5000000000, baseOutput: 30000000, icon: 'duck_open.png' },
+        cosmicDuckEgg: { name: 'Cosmic Duck Egg', description: 'An egg laid by a celestial duck. Radiates immense QP. Requires Level 8.', baseCost: 1e50, baseOutput: 1e45, icon: 'duck_open.png', prerequisite: () => playerLevel >= 8 },
+        voidQuacker: { name: 'Void Quacker', description: 'Quacks from the void itself. Unsettling. Requires Level 15.', baseCost: 1e135, baseOutput: 1e125, icon: 'duck_closed.png', prerequisite: () => playerLevel >= 15 },
+        neuralNetDuck: { name: 'Neural Net Duck Assimilator', baseCost: 1e220, baseOutput: 1e218, description: 'A self-aware AI duck network that has begun to understand the underlying quack-fabric of reality. Requires Level 22.', icon: 'duck_open.png', prerequisite: () => playerLevel >= 22 }
     };
 
     let generators = Object.keys(originalGeneratorDefinitions).map(id => ({
@@ -139,15 +139,43 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let gfUpgrades = [
-        { id: 'permClickBoost1', name: 'Feather-Light Touch I', description: 'Permanently increases QP per click by +1 for each GF owned.', cost: 1, maxLevel: 0, level: 0, type: 'global_click_per_gf', effectValue: 1, purchased: false, element: null },
-        { id: 'permGenBoost1', name: 'Golden Quackery I', description: 'Permanently increases all generator output by 5% for each GF owned.', cost: 1, maxLevel: 0, level: 0, type: 'global_gen_eff_per_gf', effectValue: 0.05, purchased: false, element: null },
-        { id: 'startingQP1', name: 'Nest Egg I', description: 'Start each rebirth with 1,000 QP.', cost: 2, maxLevel: 0, level: 0, type: 'starting_qp', effectValue: 1000, purchased: false, element: null },
-        { id: 'cheaperBabyDucklings', name: 'Discount Ducklings', description: 'Permanently reduces the base cost of Baby Ducklings by 10%.', cost: 3, maxLevel: 0, level: 0, type: 'gen_cost_reduction', targetId: 'babyDuckling', effectValue: 0.90, purchased: false, element: null }
+        { id: 'permClickBoost1', name: 'Feather-Light Touch I', description: 'Permanently increases QP per click by +1 for each GF owned.', cost: 1, baseCost: 1, maxLevel: 1, level: 0, type: 'global_click_per_gf', effectValue: 1, purchased: false, element: null },
+        { id: 'permGenBoost1', name: 'Golden Quackery I', description: 'Permanently increases all generator output by 5% for each GF owned.', cost: 1, baseCost: 1, maxLevel: 1, level: 0, type: 'global_gen_eff_per_gf', effectValue: 0.05, purchased: false, element: null },
+        { id: 'startingQP1', name: 'Nest Egg I', description: 'Start each rebirth with 1,000 QP.', cost: 2, baseCost: 2, maxLevel: 1, level: 0, type: 'starting_qp', effectValue: 1000, purchased: false, element: null },
+        { id: 'cheaperBabyDucklings', name: 'Discount Ducklings', description: 'Permanently reduces the base cost of Baby Ducklings by 10%.', cost: 3, baseCost: 3, maxLevel: 1, level: 0, type: 'gen_cost_reduction', targetId: 'babyDuckling', effectValue: 0.90, purchased: false, element: null },
+        {
+            id: 'gfRepeatableSpeed',
+            name: 'Feathered Speed',
+            description: 'All generators produce QP 1% faster. Stacks multiplicatively.',
+            cost: 10,
+            baseCost: 10,
+            costFactor: 1.2,
+            level: 0,
+            maxLevel: 0, // 0 indicates repeatable indefinitely
+            type: 'repeatable_global_gen_speed',
+            effectValue: 0.01, // 1% per level
+            purchased: false, // Indicates if at least one level is bought
+            element: null
+        },
+        {
+            id: 'gfRepeatableClick',
+            name: 'Golden Clickfluence',
+            description: 'QP per click permanently increased by 5% (compounding).',
+            cost: 10,
+            baseCost: 10,
+            costFactor: 1.25,
+            level: 0,
+            maxLevel: 0, // 0 indicates repeatable indefinitely
+            type: 'repeatable_click_multiplier',
+            effectValue: 0.05, // 5% per level
+            purchased: false,
+            element: null
+        }
     ];
 
     // --- Initialization ---
     function initializeGame() {
-        if (clickableDuckV2 && typeof duckOpen !== 'undefined') clickableDuckV2.src = duckOpen;
+        if (clickableDuckV2) clickableDuckV2.src = 'duck_open.png';
         generators.forEach(gen => {
             const originalDef = originalGeneratorDefinitions[gen.id];
             gen.baseCost = originalDef.baseCost; gen.cost = originalDef.baseCost;
@@ -309,17 +337,62 @@ document.addEventListener('DOMContentLoaded', () => {
         else { itemDiv.innerHTML = `<h4 style="font-size: 18px; color: #ff00ff;">${upgrade.name}</h4><p style="font-size: 14px;">${upgrade.description}</p><p style="font-size: 14px;">Cost: <span class="upgrade-cost">${formatNumber(upgrade.cost)}</span> QP</p><button class="buy-upgrade" data-upgrade-id="${upgrade.id}">Buy</button>`; itemDiv.style.opacity = 1; const buyButton = itemDiv.querySelector('.buy-upgrade'); if (buyButton) { buyButton.addEventListener('click', () => buyUpgrade(upgrade.id)); buyButton.disabled = qp < upgrade.cost; buyButton.style.opacity = (qp < upgrade.cost) ? 0.5 : 1; }}
     }
     function renderAvailableUpgrades() { /* ... same ... */ upgrades.forEach(upg => { if (upg.prerequisite()) { if (!upg.element) renderUpgrade(upg); else if (!upg.purchased) renderUpgrade(upg); else if (upg.purchased && upg.element.style.display !== 'none') renderUpgrade(upg); } else if (upg.element) upg.element.style.display = 'none'; });}
-    function renderGFUpgrade(gfUpgrade) { /* ... same ... */
+    function renderGFUpgrade(gfUpgrade) {
         if (!gfUpgradesListContainer) return;
         let itemDiv = gfUpgrade.element;
-        if (!itemDiv) { itemDiv = document.createElement('div'); itemDiv.className = 'gf-upgrade-item'; gfUpgradesListContainer.appendChild(itemDiv); gfUpgrade.element = itemDiv;}
-        if (gfUpgrade.purchased) { itemDiv.innerHTML = `<h4 style="font-size: 18px; color: #aaa; text-decoration: line-through;">${gfUpgrade.name}</h4><p style="font-size: 14px; color: #888;">${gfUpgrade.description}</p><p style="font-size: 14px; color: #00ff00; font-weight: bold;">Acquired!</p>`; itemDiv.style.opacity = 0.7;}
-        else { itemDiv.innerHTML = `<h4 style="font-size: 18px; color: #ffd700;">${gfUpgrade.name}</h4><p style="font-size: 14px;">${gfUpgrade.description}</p><p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">${formatNumber(gfUpgrade.cost)}</span> GF</p><button class="buy-gf-upgrade" data-gf-upgrade-id="${gfUpgrade.id}">Acquire Blessing</button>`; itemDiv.style.opacity = 1; const buyButton = itemDiv.querySelector('.buy-gf-upgrade'); if (buyButton) { buyButton.addEventListener('click', () => buyGFUpgrade(gfUpgrade.id)); buyButton.disabled = goldenFeathers < gfUpgrade.cost; buyButton.style.opacity = (goldenFeathers < gfUpgrade.cost) ? 0.5 : 1; }}
+        if (!itemDiv) {
+            itemDiv = document.createElement('div');
+            itemDiv.className = 'gf-upgrade-item';
+            gfUpgradesListContainer.appendChild(itemDiv);
+            gfUpgrade.element = itemDiv;
+        }
+
+        let htmlContent = '';
+        const isRepeatable = gfUpgrade.maxLevel === 0;
+
+        if (isRepeatable) {
+            let currentEffectText = '';
+            if (gfUpgrade.type === 'repeatable_global_gen_speed') {
+                currentEffectText = `Current Bonus: +${((Math.pow(1 + gfUpgrade.effectValue, gfUpgrade.level) - 1) * 100).toFixed(2)}% Speed`;
+            } else if (gfUpgrade.type === 'repeatable_click_multiplier') {
+                currentEffectText = `Current Bonus: +${((Math.pow(1 + gfUpgrade.effectValue, gfUpgrade.level) - 1) * 100).toFixed(2)}% Click Power`;
+            }
+            htmlContent = `
+                <h4 style="font-size: 18px; color: #ffd700;">${gfUpgrade.name} (Level ${gfUpgrade.level || 0})</h4>
+                <p style="font-size: 14px;">${gfUpgrade.description}</p>
+                <p style="font-size: 14px; color: #a2d2ff;">${currentEffectText}</p>
+                <p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">${formatNumber(gfUpgrade.cost)}</span> GF</p>
+                <button class="buy-gf-upgrade" data-gf-upgrade-id="${gfUpgrade.id}">Acquire Blessing</button>`;
+            itemDiv.style.opacity = 1;
+        } else { // Non-repeatable (maxLevel === 1)
+            if (gfUpgrade.purchased) {
+                htmlContent = `
+                    <h4 style="font-size: 18px; color: #aaa; text-decoration: line-through;">${gfUpgrade.name}</h4>
+                    <p style="font-size: 14px; color: #888;">${gfUpgrade.description}</p>
+                    <p style="font-size: 14px; color: #00ff00; font-weight: bold;">Acquired!</p>`;
+                itemDiv.style.opacity = 0.7;
+            } else {
+                htmlContent = `
+                    <h4 style="font-size: 18px; color: #ffd700;">${gfUpgrade.name}</h4>
+                    <p style="font-size: 14px;">${gfUpgrade.description}</p>
+                    <p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">${formatNumber(gfUpgrade.cost)}</span> GF</p>
+                    <button class="buy-gf-upgrade" data-gf-upgrade-id="${gfUpgrade.id}">Acquire Blessing</button>`;
+                itemDiv.style.opacity = 1;
+            }
+        }
+        itemDiv.innerHTML = htmlContent;
+        const buyButton = itemDiv.querySelector('.buy-gf-upgrade');
+        if (buyButton) {
+            buyButton.removeEventListener('click', buyGFUpgrade); // Prevent multiple listeners
+            buyButton.addEventListener('click', () => buyGFUpgrade(gfUpgrade.id));
+            buyButton.disabled = goldenFeathers < gfUpgrade.cost || (gfUpgrade.maxLevel !== 0 && gfUpgrade.purchased);
+            buyButton.style.opacity = (buyButton.disabled) ? 0.5 : 1;
+        }
     }
     function renderAllGFUpgrades() { if (!gfUpgradesListContainer) return; gfUpgrades.forEach(upg => renderGFUpgrade(upg));}
 
     // --- Game Logic Functions ---
-    function manualClick() { /* ... same ... */ qp += qpPerClick; totalQPAllTime += qpPerClick; if (clickableDuckV2 && typeof duckOpen !== 'undefined' && typeof duckClosed !== 'undefined') { clickableDuckV2.src = duckClosed; setTimeout(() => { clickableDuckV2.src = duckOpen; }, 100); } playQuackSound(); updateDisplays(); }
+    function manualClick() { qp += qpPerClick; totalQPAllTime += qpPerClick; if (clickableDuckV2) { clickableDuckV2.src = 'duck_closed.png'; setTimeout(() => { clickableDuckV2.src = 'duck_open.png'; }, 100); } playQuackSound(); updateDisplays(); }
     function buyGenerator(generatorId) { /* ... same ... */
         const generator = generators.find(g => g.id === generatorId);
         if (generator && qp >= generator.cost) {
@@ -367,21 +440,78 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`Rebirth successful! You gained ${gfGained} Golden Feather(s). Total GF: ${goldenFeathers}`);
         }
     }
-    function applyAllGFUpgradeEffects() { /* ... same ... */
-        let newQpPerClick = 1;
-        gfUpgrades.forEach(upg => { if (upg.purchased && upg.type === 'global_click_per_gf') newQpPerClick += (upg.effectValue * goldenFeathers);});
-        upgrades.filter(u => u.type === 'click' && u.purchased).forEach(u => { if (u.effectType === 'multiplier') newQpPerClick *= u.effectValue; else if (u.effectType === 'additive') newQpPerClick += u.effectValue;});
+    function applyAllGFUpgradeEffects() {
+        const gqInfusionLevel = heavenUpgrades.goldenQuackInfusion ? heavenUpgrades.goldenQuackInfusion.owned : 0;
+        const gqInfusionEffectPerLevel = heavenUpgrades.goldenQuackInfusion ? heavenUpgrades.goldenQuackInfusion.effectPerLevel : 0;
+
+        // Calculate repeatable click multiplier first
+        let repeatableClickMultiplierTotal = 1.0;
+        gfUpgrades.filter(u => u.type === 'repeatable_click_multiplier' && u.level > 0).forEach(upg => {
+            repeatableClickMultiplierTotal *= Math.pow(1 + upg.effectValue, upg.level);
+        });
+
+        let newQpPerClick = 1; // Base
+        upgrades.filter(u => u.type === 'click' && u.effectType === 'additive' && u.purchased)
+            .forEach(u => newQpPerClick += u.effectValue); // Additive main upgrades
+
+        let mainClickMultiplier = 1.0;
+        upgrades.filter(u => u.type === 'click' && u.effectType === 'multiplier' && u.purchased)
+            .forEach(u => mainClickMultiplier *= u.effectValue); // Multiplicative main upgrades
+
+        newQpPerClick *= mainClickMultiplier;
+        newQpPerClick *= repeatableClickMultiplierTotal;
+
+        gfUpgrades.filter(u => u.type === 'global_click_per_gf' && u.purchased).forEach(upg => {
+            newQpPerClick += (upg.effectValue * goldenFeathers);
+        });
         qpPerClick = newQpPerClick;
+
+        // Calculate repeatable speed multiplier
+        let repeatableSpeedMultiplierTotal = 1.0;
+        gfUpgrades.filter(u => u.type === 'repeatable_global_gen_speed' && u.level > 0).forEach(upg => {
+            repeatableSpeedMultiplierTotal *= Math.pow(1 + upg.effectValue, upg.level);
+        });
+
         let globalGenMultiplierFromGF = 1.0;
-        gfUpgrades.forEach(upg => { if (upg.purchased && upg.type === 'global_gen_eff_per_gf') globalGenMultiplierFromGF += (upg.effectValue * goldenFeathers);});
+        gfUpgrades.filter(u => u.type === 'global_gen_eff_per_gf' && u.purchased).forEach(upg => {
+            let actualEffectPerGF = upg.effectValue;
+            if (gqInfusionLevel > 0) {
+                actualEffectPerGF += (gqInfusionLevel * gqInfusionEffectPerLevel);
+            }
+            globalGenMultiplierFromGF += (actualEffectPerGF * goldenFeathers);
+        });
+
         generators.forEach(gen => {
-            const originalDef = originalGeneratorDefinitions[gen.id]; let currentBaseCost = originalDef.baseCost;
-            gfUpgrades.filter(upg => upg.type === 'gen_cost_reduction' && upg.targetId === gen.id && upg.purchased).forEach(costUpg => { currentBaseCost *= costUpg.effectValue; });
+            const originalDef = originalGeneratorDefinitions[gen.id];
+            let currentBaseCost = originalDef.baseCost;
+            gfUpgrades.filter(upg => upg.type === 'gen_cost_reduction' && upg.targetId === gen.id && (upg.purchased || upg.level > 0)).forEach(costUpg => { currentBaseCost *= costUpg.effectValue; });
             gen.baseCost = Math.max(1, currentBaseCost);
             gen.cost = (gen.owned > 0) ? Math.ceil(gen.baseCost * Math.pow(1.15, gen.owned)) : gen.baseCost;
-            let currentOutput = originalDef.baseOutput * globalGenMultiplierFromGF;
-            upgrades.filter(u => u.type === 'generator' && u.targetId === gen.id && u.purchased).forEach(u => { if (u.effectType === 'multiplier') currentOutput *= u.effectValue; else if (u.effectType === 'additive') currentOutput += u.effectValue;});
-            upgrades.filter(u => u.type === 'global' && u.purchased).forEach(u => { if (u.effectType === 'multiplier') currentOutput *= u.effectValue; });
+
+            let currentOutput = originalDef.baseOutput * globalGenMultiplierFromGF; // Base * Heaven * Non-Repeatable GF
+
+            upgrades.filter(u => (u.type === 'generator' || u.type === 'multi-generator') && u.purchased).forEach(upg => {
+                if (upg.type === 'generator' && upg.targetId === gen.id) {
+                    if (upg.effectType === 'multiplier') currentOutput *= upg.effectValue;
+                    else if (upg.effectType === 'additive') currentOutput += upg.effectValue;
+                } else if (upg.type === 'multi-generator') {
+                    const targetInfo = upg.targets.find(t => t.id === gen.id);
+                    if (targetInfo) {
+                        if (upg.effectType === 'multiplier') currentOutput *= targetInfo.effectValue;
+                    }
+                }
+            });
+            upgrades.filter(u => u.type === 'global' && u.purchased).forEach(u => {
+                if (u.effectType === 'multiplier') currentOutput *= u.effectValue;
+            });
+
+            currentOutput *= repeatableSpeedMultiplierTotal;
+
+            const essenceOverdriveUpgrade = upgrades.find(u => u.id === 'essenceOverdrive' && u.purchased);
+            if (essenceOverdriveUpgrade && duckGodSouls > 0) {
+                currentOutput *= (1 + (essenceOverdriveUpgrade.effectValue * duckGodSouls));
+            }
+
             gen.outputPerGenerator = currentOutput;
         });
         calculateQPS();
@@ -392,8 +522,37 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (upgrade.type === 'global') { generators.forEach(g => { if (upgrade.effectType === 'multiplier') g.outputPerGenerator *= upgrade.effectValue; renderGenerator(g); });}
         calculateQPS();
     }
-    function buyUpgrade(upgradeId) { /* ... same ... */ const upgrade = upgrades.find(u => u.id === upgradeId); if (upgrade && !upgrade.purchased && qp >= upgrade.cost) { qp -= upgrade.cost; upgrade.purchased = true; applyUpgradeEffect(upgrade); renderUpgrade(upgrade); updateDisplays(); renderAvailableUpgrades();}}
-    function buyGFUpgrade(gfUpgradeId) { /* ... same ... */ const gfUpgrade = gfUpgrades.find(u => u.id === gfUpgradeId); if (gfUpgrade && !gfUpgrade.purchased && goldenFeathers >= gfUpgrade.cost) {goldenFeathers -= gfUpgrade.cost; gfUpgrade.purchased = true; applyAllGFUpgradeEffects(); renderGFUpgrade(gfUpgrade); renderAllGFUpgrades(); updateDisplays(); }}
+    function buyUpgrade(upgradeId) { /* ... same ... */ const upgrade = upgrades.find(u => u.id === upgradeId); if (upgrade && !upgrade.purchased && qp >= upgrade.cost) { qp -= upgrade.cost; upgrade.purchased = true; applyUpgradeEffect(upgrade); renderUpgrade(upgrade); updateDisplays(); renderAvailableUpgrades(); playRandomSound(genericSoundArchive);}}
+    function buyGFUpgrade(gfUpgradeId) {
+        const gfUpgrade = gfUpgrades.find(u => u.id === gfUpgradeId);
+        if (!gfUpgrade || goldenFeathers < gfUpgrade.cost) {
+            return;
+        }
+
+        if (gfUpgrade.maxLevel === 0) { // Repeatable upgrade
+             if (goldenFeathers >= gfUpgrade.cost) { // Ensure can afford
+                goldenFeathers -= gfUpgrade.cost;
+                gfUpgrade.level = (gfUpgrade.level || 0) + 1;
+                gfUpgrade.cost = Math.ceil(gfUpgrade.baseCost * Math.pow(gfUpgrade.costFactor, gfUpgrade.level));
+                if (!gfUpgrade.purchased) gfUpgrade.purchased = true;
+            } else { return; } // Cannot afford
+        }
+        else if (gfUpgrade.maxLevel > 0 && (gfUpgrade.level || 0) < gfUpgrade.maxLevel) { // Non-repeatable, not yet maxed
+            if (gfUpgrade.purchased && gfUpgrade.level >= gfUpgrade.maxLevel) return; // Already at max level for non-repeatables
+            goldenFeathers -= gfUpgrade.cost;
+            gfUpgrade.purchased = true;
+            gfUpgrade.level = (gfUpgrade.level || 0) + 1;
+            if (gfUpgrade.level >= gfUpgrade.maxLevel) {
+                 gfUpgrade.cost = Infinity;
+            }
+        } else {
+            return;
+        }
+
+        applyAllGFUpgradeEffects();
+        renderGFUpgrade(gfUpgrade);
+        updateDisplays();
+    }
 
     function applyLevelBasedVisuals(level) {
         const bodyElement = document.body;
@@ -525,10 +684,12 @@ document.addEventListener('DOMContentLoaded', () => {
             generators: generators.map(g => ({ id: g.id, owned: g.owned, cost: g.cost, baseCost: g.baseCost, outputPerGenerator: g.outputPerGenerator })),
             upgrades: upgrades.map(u => ({ id: u.id, purchased: u.purchased })),
             goldenFeathers: goldenFeathers, totalQPAllTime: totalQPAllTime, playerLevel: playerLevel,
-            gfUpgrades: gfUpgrades.map(u => ({ id: u.id, purchased: u.purchased, level: u.level })),
+            gfUpgradeStates: gfUpgrades.map(u => ({ id: u.id, purchased: u.purchased, level: u.level || 0, cost: u.cost })),
             currentDimension: currentDimension, divineDuckChow: divineDuckChow,
-            heavenUpgrades: { celestialFeeder: { owned: heavenUpgrades.celestialFeeder.owned }, prayerAltar: { owned: heavenUpgrades.prayerAltar.owned }},
-            ddcPerSecondPassive: ddcPerSecondPassive
+            savedHeavenUpgrades: Object.fromEntries(Object.entries(heavenUpgrades).map(([id, upg]) => [id, { owned: upg.owned, cost: upg.cost }])),
+            ddcPerSecondPassive: ddcPerSecondPassive,
+            youtubeMemesState: youtubeMemes.map(m => ({ id: m.id, unlocked: m.unlocked })),
+            duckGodSouls: duckGodSouls
         };
         localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
         alert("Game Saved! Quack-tastic!"); console.log("Game saved:", gameState);
@@ -540,15 +701,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gameState = JSON.parse(savedState); console.log("Loading game state:", gameState);
                 qp = gameState.qp || 0; goldenFeathers = gameState.goldenFeathers || 0;
                 totalQPAllTime = gameState.totalQPAllTime || 0; playerLevel = gameState.playerLevel || 0;
+                duckGodSouls = gameState.duckGodSouls || 0;
                 currentDimension = gameState.currentDimension || 'normal';
                 divineDuckChow = gameState.divineDuckChow || 0;
                 ddcPerSecondPassive = gameState.ddcPerSecondPassive || 1;
                 if (gameState.generators) { gameState.generators.forEach(savedGen => { const gameGen = generators.find(g => g.id === savedGen.id); if (gameGen) { gameGen.owned = savedGen.owned || 0; gameGen.baseCost = savedGen.baseCost || originalGeneratorDefinitions[gameGen.id].baseCost; gameGen.cost = savedGen.cost || gameGen.baseCost * Math.pow(1.15, gameGen.owned); gameGen.outputPerGenerator = savedGen.outputPerGenerator || originalGeneratorDefinitions[gameGen.id].baseOutput; }});}
                 if (gameState.upgrades) { gameState.upgrades.forEach(savedUpgrade => { const gameUpgrade = upgrades.find(u => u.id === savedUpgrade.id); if (gameUpgrade) gameUpgrade.purchased = savedUpgrade.purchased || false; });}
-                if (gameState.gfUpgrades) { gameState.gfUpgrades.forEach(savedGFUpg => { const gameGFUpg = gfUpgrades.find(u => u.id === savedGFUpg.id); if (gameGFUpg) { gameGFUpg.purchased = savedGFUpg.purchased || false; gameGFUpg.level = savedGFUpg.level || 0; }});}
-                if (gameState.heavenUpgrades) { if (heavenUpgrades.celestialFeeder && gameState.heavenUpgrades.celestialFeeder) heavenUpgrades.celestialFeeder.owned = gameState.heavenUpgrades.celestialFeeder.owned || 0; if (heavenUpgrades.prayerAltar && gameState.heavenUpgrades.prayerAltar) heavenUpgrades.prayerAltar.owned = gameState.heavenUpgrades.prayerAltar.owned || 0; }
+
+                if (gameState.gfUpgradeStates) {
+                    gameState.gfUpgradeStates.forEach(savedGFUpg => {
+                        const gameGFUpg = gfUpgrades.find(u => u.id === savedGFUpg.id);
+                        if (gameGFUpg) {
+                            gameGFUpg.purchased = savedGFUpg.purchased || false;
+                            gameGFUpg.level = savedGFUpg.level || 0;
+                            gameGFUpg.cost = savedGFUpg.cost || (gameGFUpg.baseCost ? (gameGFUpg.maxLevel === 0 ? Math.ceil(gameGFUpg.baseCost * Math.pow(gameGFUpg.costFactor, gameGFUpg.level)) : gameGFUpg.baseCost) : 1);
+                        }
+                    });
+                } else if (gameState.gfUpgrades) { // Legacy support
+                     gameState.gfUpgrades.forEach(savedGFUpg => {
+                        const gameGFUpg = gfUpgrades.find(u => u.id === savedGFUpg.id);
+                        if (gameGFUpg) {
+                            gameGFUpg.purchased = savedGFUpg.purchased || false;
+                            gameGFUpg.level = savedGFUpg.level || (gameGFUpg.purchased && gameGFUpg.maxLevel === 1 ? 1 : 0);
+                            if (gameGFUpg.maxLevel === 0 && gameGFUpg.baseCost && gameGFUpg.costFactor) {
+                                gameGFUpg.cost = Math.ceil(gameGFUpg.baseCost * Math.pow(gameGFUpg.costFactor, gameGFUpg.level));
+                            } else if (gameGFUpg.maxLevel === 1) { // Non-repeatable legacy
+                                gameGFUpg.cost = gameGFUpg.purchased ? Infinity : (gameGFUpg.baseCost || gameGFUpg.cost); // Use baseCost if available
+                            }
+                        }
+                    });
+                }
+
+                if (gameState.savedHeavenUpgrades) {
+                    Object.entries(gameState.savedHeavenUpgrades).forEach(([id, savedUpg]) => {
+                        if (heavenUpgrades[id]) {
+                            heavenUpgrades[id].owned = savedUpg.owned || 0;
+                            if (heavenUpgrades[id].owned < heavenUpgrades[id].maxOwned) {
+                                heavenUpgrades[id].cost = savedUpg.cost || heavenUpgrades[id].baseCost;
+                            } else {
+                                heavenUpgrades[id].cost = savedUpg.cost === Infinity ? Infinity : (heavenUpgrades[id].baseCost * Math.pow(heavenUpgrades[id].costScaling || 1, heavenUpgrades[id].owned));
+                                if (heavenUpgrades[id].owned >= heavenUpgrades[id].maxOwned && heavenUpgrades[id].maxOwned > 0) {
+                                     heavenUpgrades[id].cost = Infinity;
+                                }
+                            }
+                        }
+                    });
+                }
+                }
+                applyAllAstralBoostEffectsOnInitOrLoad();
+
+                if (gameState.youtubeMemesState) {
+                    gameState.youtubeMemesState.forEach(savedMeme => {
+                        const gameMeme = youtubeMemes.find(m => m.id === savedMeme.id);
+                        if (gameMeme) {
+                            gameMeme.unlocked = savedMeme.unlocked;
+                        }
+                    });
+                }
+
                 qpPerClick = gameState.qpPerClick || 1;
-                applyAllGFUpgradeEffects();
+                // applyAllGFUpgradeEffects(); // This is now called by applyAllAstralBoostEffectsOnInitOrLoad
                 generators.forEach(gen => { if (gen.owned === 0) gen.cost = gen.baseCost; });
                 renderAllGenerators(); renderAvailableUpgrades(); renderAllGFUpgrades();
                 updateDisplays();
