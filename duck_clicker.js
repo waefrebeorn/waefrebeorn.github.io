@@ -4,6 +4,68 @@ let allDuckemonData = {};  // Loaded from JSON
 let currentDuckemonState = {}; // Initialized after loading allDuckemonData
 var youtubeVideoIDs = []; // Global for access, populated after fetch
 
+// --- Upgrade Definitions ---
+const upgradeDefinitions = [
+    {
+        id: "reinforcedBeak1",
+        name: "Reinforced Beak I",
+        description: "Strengthens your clicking power. Click QPS x1.5.",
+        cost: 1000,
+        currency: "qp", // qp or gf (Golden Feathers)
+        target: "click", // 'click', 'all', or a specific duckemon ID
+        multiplier: 1.5,
+        purchased: false,
+        icon: "icons/click_upgrade_1.png" // Placeholder icon path
+    },
+    {
+        id: "babyDucklingBoost1",
+        name: "Duckling Training Wheels",
+        description: "Increases Baby Duckling QPS by 50%.",
+        cost: 500,
+        currency: "qp",
+        target: "babyDuckling", // Assuming 'babyDuckling' is an ID in allDuckemonData
+        multiplier: 1.5,
+        purchased: false,
+        icon: "icons/baby_duckling_boost.png"
+    },
+    {
+        id: "allQuackBoost1",
+        name: "Synchronized Quacking",
+        description: "Increases QPS of all Duckemon by 20%.",
+        cost: 10000,
+        currency: "qp",
+        target: "all",
+        multiplier: 1.2,
+        purchased: false,
+        icon: "icons/all_quack_boost.png"
+    }
+];
+
+const gfUpgradeDefinitions = [
+    {
+        id: "goldenClickBoost1",
+        name: "Golden Click Enhancer I",
+        description: "Permanently increases click power by 100% (x2).",
+        cost: 5,
+        currency: "gf",
+        target: "click",
+        multiplier: 2,
+        purchased: false,
+        icon: "icons/golden_click_1.png"
+    },
+    {
+        id: "goldenAllQpsBoost1",
+        name: "Golden Duck Blessing I",
+        description: "Permanently increases QPS of all Duckemon by 50%.",
+        cost: 10,
+        currency: "gf",
+        target: "all",
+        multiplier: 1.5,
+        purchased: false,
+        icon: "icons/golden_all_qps_1.png"
+    }
+];
+
 document.addEventListener('DOMContentLoaded', () => {
     // Define global variables to hold data from JSON
     // youtubeVideoURLs is already declared as let above.
@@ -446,11 +508,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function applyAllGFUpgradeEffects() {
-            Object.values(currentDuckemonState).forEach(d => { if(allDuckemonData[d.id]) d.currentQPS = allDuckemonData[d.id].baseQPS; });
+            // Reset relevant stats to their absolute base values before applying GF upgrades
+            qpPerClick = 1; // Absolute base for clicking power
+            Object.values(currentDuckemonState).forEach(d => {
+                if(allDuckemonData[d.id]) d.currentQPS = allDuckemonData[d.id].baseQPS;
+            });
+
+            // Apply purchased GF upgrades
             if (typeof gfUpgradeDefinitions !== 'undefined') {
-                gfUpgradeDefinitions.forEach(u => { if (u.purchased) applyUpgradeEffect(u, false); });
+                gfUpgradeDefinitions.forEach(u => {
+                    if (u.purchased) {
+                        // Directly apply effect without charging cost or re-calling applyAllGFUpgradeEffects
+                        if (u.target === 'click') {
+                            qpPerClick *= u.multiplier;
+                        } else if (u.target === 'all') {
+                            Object.values(currentDuckemonState).forEach(d => {
+                                if(d.isDiscovered) d.currentQPS *= u.multiplier;
+                            });
+                        } else if (currentDuckemonState[u.target]) {
+                            const dtu = currentDuckemonState[u.target];
+                            if (dtu.isDiscovered) {
+                                // Assuming GF upgrades always multiply currentQPS after it's reset to baseQPS.
+                                // If a GF upgrade were to use 'multiplyBase', it would mean baseQPS * multiplier,
+                                // which is already handled by the QPS reset if only one such upgrade exists.
+                                // For simplicity and to avoid complex stacking logic within GF upgrades themselves here,
+                                // we'll assume they directly multiply the now base QPS.
+                                dtu.currentQPS *= u.multiplier;
+                            }
+                        }
+                    }
+                });
             }
-            calculateQPS(); renderAllDuckemon();
+
+            // After applying all GF effects, recalculate QPS and update displays
+            calculateQPS();
+            updateQPPerClickDisplay(); // Make sure click display is updated
+            renderAllDuckemon(); // Re-render duckemon to show updated QPS values
         }
 
         initializeGame(); // This call is crucial. It now uses the currentDuckemonState that was just prepared.
