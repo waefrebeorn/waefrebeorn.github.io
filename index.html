@@ -717,6 +717,7 @@
             <div class="tabs-navigation">
                 <button class="tab-link active" onclick="openGameTab(event, 'duckClickerTab')">Duck Clicker</button>
                 <button class="tab-link" onclick="openGameTab(event, 'retroArcadeTab')">Retro Arcade</button>
+                <button class="tab-link" onclick="openGameTab(event, 'memeCavernTab')">Meme Cavern</button>
                <button id="soundButton">Video Sound: OFF</button> <!-- Moved button -->
             </div>
 
@@ -827,6 +828,12 @@
                     </div>
                 </div>
             </div> <!-- End of retroArcadeTab -->
+
+            <div id="memeCavernTab" class="game-tab-content" style="display:none;">
+                <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 20px;">The Meme Cavern of Infinite Quacks</h2>
+                <div id="youtubeLinksContainer" style="text-align: left; max-height: 500px; overflow-y: auto; padding: 10px; background-color: rgba(255,255,255,0.05); border-radius: 8px;"></div>
+                <p style="margin-top: 15px; font-size: 14px; color: #ccc;">Discover memes as you level up! Older, more mysterious memes may appear deeper in your journey.</p>
+            </div>
 
 <style>
 /* Additional style for YouTube links, can be merged into main style block later if preferred */
