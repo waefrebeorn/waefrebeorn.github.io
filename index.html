@@ -212,6 +212,12 @@
         .buy-generator:hover { background-color: #ffdd00; }
         .buy-upgrade:hover { background-color: #ffdd00; }
 
+        .buy-generator:active, .buy-upgrade:active, .buy-gf-upgrade:active, .buy-heaven-item:active {
+            transform: scale(0.95) translateY(1px);
+            filter: brightness(0.9);
+            transition: transform 0.05s ease-out, filter 0.05s ease-out;
+        }
+
         /* Save/Load/Reset buttons */
         #saveLoadControls button { /* Already styled inline, but this provides a fallback/override */
             margin: 5px 8px; /* More horizontal margin */
@@ -821,6 +827,21 @@
                     </div>
                 </div>
             </div> <!-- End of retroArcadeTab -->
+
+<style>
+/* Additional style for YouTube links, can be merged into main style block later if preferred */
+#youtubeLinksContainer .memeDiv a { /* Assuming memeDiv is the class for the div wrapping each link */
+    display: inline-block;
+    padding: 5px 0px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    /* Inherits color, font-size, text-decoration from duck_clicker.js styling, which is fine */
+}
+#youtubeLinksContainer .memeDiv a:hover {
+    color: #ffff00 !important; /* Brighter color on hover, !important to override JS inline if needed */
+    transform: translateX(5px);
+    text-decoration: underline !important; /* Ensure underline on hover */
+}
+</style>
         </div> <!-- End of the first, correct gamesArea -->
 
         <!-- Super Level Display Area -->

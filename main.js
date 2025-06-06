@@ -74,11 +74,11 @@ document.getElementById('playButton').addEventListener('click', () => {
 function toggleDuckImage() {
   const cubeFaces = document.querySelectorAll('.cube div');
   cubeFaces.forEach(face => {
-    // Ensure duckOpen and duckClosed are defined (e.g., by loading duck.js first)
-    if (typeof duckOpen !== 'undefined' && typeof duckClosed !== 'undefined') {
-        face.style.backgroundImage = (face.style.backgroundImage === `url("${duckOpen}")`) ? `url("${duckClosed}")` : `url("${duckOpen}")`;
+    const currentImage = face.style.backgroundImage;
+    if (currentImage.includes("duck_open.png")) {
+        face.style.backgroundImage = `url("duck_closed.png")`;
     } else {
-        console.error("duckOpen or duckClosed is not defined. Make sure duck.js is loaded before main.js");
+        face.style.backgroundImage = `url("duck_open.png")`;
     }
   });
 }
@@ -87,11 +87,7 @@ function toggleDuckImage() {
 document.addEventListener('DOMContentLoaded', () => {
     const cubeFaces = document.querySelectorAll('.cube div');
     cubeFaces.forEach(face => {
-        if (typeof duckClosed !== 'undefined') {
-            face.style.backgroundImage = `url("${duckClosed}")`;
-        } else {
-            console.error("duckClosed is not defined for initial setup. Make sure duck.js is loaded.");
-        }
+        face.style.backgroundImage = `url("duck_closed.png")`;
     });
     // Start duck animation for the cube
     setInterval(toggleDuckImage, 1000);
