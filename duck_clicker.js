@@ -178,31 +178,85 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const SAVE_KEY = 'waefreBeornDuckClickerSaveV2';
 
-        // YouTube Meme Cavern Functions (displayYoutubeMeme, updateMemeCavern)
-        // These are now fine here as youtubeVideoIDs is populated before this part runs.
-        function displayYoutubeMeme(videoId) {
-            const container = document.getElementById('youtubeLinksContainer');
-            if (container && videoId) {
-                const memeDiv = document.createElement('div');
-                memeDiv.className = 'memeDiv';
-                const iframe = document.createElement('iframe');
-                iframe.src = "https://www.youtube.com/embed/" + videoId;
-                iframe.width = "560"; iframe.height = "315"; iframe.frameBorder = "0";
-                iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-                iframe.allowFullscreen = true;
-                memeDiv.appendChild(iframe);
-                container.appendChild(memeDiv);
-            }
-        }
-
+        // YouTube Meme Cavern Functions (updateMemeCavern)
+        // displayYoutubeMeme is removed as its logic is incorporated into updateMemeCavern.
         function updateMemeCavern() {
             const container = document.getElementById('youtubeLinksContainer');
             if (!container) { console.error('Meme Cavern container not found!'); return; }
-            container.innerHTML = '';
-            const memesToShow = playerLevel === 0 ? 5 : Math.min(5 + Math.ceil((youtubeVideoIDs.length - 5) * (playerLevel / 100)), youtubeVideoIDs.length);
-            for (let i = 0; i < memesToShow; i++) {
-                if (youtubeVideoIDs[i]) { displayYoutubeMeme(youtubeVideoIDs[i]); }
-            }
+            container.innerHTML = ''; // Clear previous content
+
+            const memesToShowCount = playerLevel === 0 ? 5 : Math.min(5 + Math.ceil((youtubeVideoIDs.length - 5) * (playerLevel / 100)), youtubeVideoIDs.length);
+
+            const unlockedInfoDiv = document.createElement('div');
+            unlockedInfoDiv.id = 'memeUnlockedCount';
+            unlockedInfoDiv.style.textAlign = 'center';
+            unlockedInfoDiv.style.padding = '10px';
+            unlockedInfoDiv.style.fontSize = '16px';
+            unlockedInfoDiv.style.color = '#00ffff'; // Cyan color
+            unlockedInfoDiv.textContent = `Unlocked Memes: ${memesToShowCount} / ${youtubeVideoIDs.length}`;
+            container.appendChild(unlockedInfoDiv);
+
+            const memeListDiv = document.createElement('div');
+            memeListDiv.id = 'memeList';
+            memeListDiv.style.display = 'flex';
+            memeListDiv.style.flexDirection = 'column';
+            memeListDiv.style.gap = '15px'; // Spacing between meme entries
+            container.appendChild(memeListDiv);
+
+            youtubeVideoIDs.forEach((videoId, index) => {
+                const memeEntryDiv = document.createElement('div');
+                memeEntryDiv.className = 'meme-entry'; // For potential future styling
+                memeEntryDiv.style.padding = '10px';
+                memeEntryDiv.style.border = '1px solid #444';
+                memeEntryDiv.style.borderRadius = '5px';
+                memeEntryDiv.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+
+                const title = document.createElement('h4');
+                title.style.color = '#ffff00'; // Yellow title
+                title.style.marginBottom = '5px';
+
+                if (index < memesToShowCount) {
+                    // This meme is "unlocked"
+                    title.textContent = `Meme #${index + 1} (ID: ${videoId})`; // Using index as placeholder title
+
+                    const iframe = document.createElement('iframe');
+                    iframe.src = "https://www.youtube.com/embed/" + videoId;
+                    iframe.width = "100%"; // Make iframe responsive
+                    iframe.height = "315"; // Default height, can be adjusted with CSS later if needed
+                    iframe.frameBorder = "0";
+                    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+                    iframe.allowFullscreen = true;
+
+                    memeEntryDiv.appendChild(title);
+                    memeEntryDiv.appendChild(iframe);
+                } else {
+                    // This meme is "locked"
+                    title.textContent = `Meme #${index + 1} - Locked`;
+                    const lockedText = document.createElement('p');
+                    lockedText.textContent = 'Discover more memes by increasing your player level.';
+                    lockedText.style.color = '#777';
+
+                    // Try to find the level at which this specific meme would unlock
+                    let unlockLevel = playerLevel + 1; // Start searching from next level
+                    let foundUnlockLevel = false;
+                    for (let lvl = 0; lvl <= 100; lvl++) { // Max player level is 100 for this calculation
+                        const countAtLvl = lvl === 0 ? 5 : Math.min(5 + Math.ceil((youtubeVideoIDs.length - 5) * (lvl / 100)), youtubeVideoIDs.length);
+                        if (index < countAtLvl) {
+                            unlockLevel = lvl;
+                            foundUnlockLevel = true;
+                            break;
+                        }
+                    }
+                    if (foundUnlockLevel) {
+                        lockedText.textContent = `Unlock at Player Level ${unlockLevel}.`;
+                    }
+
+                    memeEntryDiv.appendChild(title);
+                    memeEntryDiv.appendChild(lockedText);
+                    memeEntryDiv.style.filter = 'grayscale(80%) opacity(0.6)'; // Visually indicate locked
+                }
+                memeListDiv.appendChild(memeEntryDiv);
+            });
         }
 
         const memeCavernTabButton = document.querySelector('.tab-link[onclick*="memeCavernTab"]');
@@ -257,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function checkLevelUp() {
+            console.log(`Checking level up. Total QP All Time: ${totalQPAllTime}, Current Level: ${playerLevel}`);
             const oldLevel = playerLevel;
             let newLevel = 0;
             for (let i = finalLevelQPThresholds.length - 1; i >= 0; i--) {
@@ -266,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             playerLevel = newLevel; // Update playerLevel immediately
+            if (oldLevel !== playerLevel) {
+                console.log(`New Level: ${playerLevel}`);
+            }
 
             let newDuckemonDiscoveredThisCycle = false;
             Object.values(currentDuckemonState).forEach(duckemon => {
@@ -407,7 +465,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function renderAllDuckemon() {
             generatorsListContainer.innerHTML = '';
-            Object.values(currentDuckemonState).forEach(duckemon => renderDuckemon(duckemon));
+            const discoveredDuckemons = Object.values(currentDuckemonState).filter(d => d.isDiscovered);
+            discoveredDuckemons.sort((a, b) => {
+                const idA = a.id.toLowerCase(); // ignore case
+                const idB = b.id.toLowerCase(); // ignore case
+                const numAExtract = idA.match(/\d+$/);
+                const numBExtract = idB.match(/\d+$/);
+                let numA, numB;
+                if (numAExtract) numA = parseInt(numAExtract[0]);
+                if (numBExtract) numB = parseInt(numBExtract[0]);
+
+                const prefixA = idA.replace(/\d+$/, '');
+                const prefixB = idB.replace(/\d+$/, '');
+
+                if (prefixA !== prefixB) {
+                    return prefixA.localeCompare(prefixB);
+                }
+                if (numA !== undefined && numB !== undefined) {
+                    return numA - numB;
+                }
+                return idA.localeCompare(idB); // Fallback for non-numeric or mixed
+            });
+            discoveredDuckemons.forEach(duckemon => renderDuckemon(duckemon));
         }
 
         function renderDuckemon(duckemon) {
@@ -437,12 +516,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Disable button if not enough QP
             button.disabled = qp < duckemon.currentCost;
 
-            detailsDiv.innerHTML = `Owned: ${duckemon.owned} <br> Base QPS: ${formatNumber(duckemon.baseQPS)} <br> Cost: ${formatNumber(duckemon.currentCost)}${unlockText}`;
+            detailsDiv.innerHTML = `Owned: ${duckemon.owned} <br> Current QPS: ${formatNumber(duckemon.currentQPS)} <br> Cost: ${formatNumber(duckemon.currentCost)}`;
             itemDiv.appendChild(nameDiv); itemDiv.appendChild(detailsDiv); itemDiv.appendChild(button);
             generatorsListContainer.appendChild(itemDiv);
         }
 
         function buyDuckemon(duckemonId) {
+            console.log(`Buying Duckemon: ${duckemonId}. QP before: ${qp}, Cost: ${currentDuckemonState[duckemonId] ? currentDuckemonState[duckemonId].currentCost : 'N/A'}`);
             const duckemon = currentDuckemonState[duckemonId];
             // Condition to check if player can buy: QP must be sufficient AND (if it's a level-locked item, player level must be sufficient OR if it's QP-locked, total QP must be sufficient - this part is for initial discovery, not re-buying)
             // The primary check for buying is simply having enough QP for the currentCost if the item is already discovered and visible.
@@ -457,14 +537,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 // isDiscovered is already true if we are here.
                 calculateQPS();
                 updateQPDisplay();
-                renderDuckemon(duckemon); // Re-render this specific duckemon
+                renderAllDuckemon();
                 checkLevelUp(); // Check if this purchase causes a level up or other unlocks
+                console.log(`QP After: ${qp}, Owned: ${duckemon.owned}, New Cost: ${duckemon.currentCost}`);
             }
         }
 
         function calculateQPS() {
+            console.log('Calculating QPS. CurrentDuckemonState:', JSON.parse(JSON.stringify(currentDuckemonState)));
             let newQPS = 0;
             Object.values(currentDuckemonState).forEach(g => { if(g.isDiscovered && g.owned > 0) newQPS += g.owned * g.currentQPS; });
+            console.log('New QPS calculated:', newQPS);
             qpPerSecond = newQPS; updateQPSDisplay();
         }
 
@@ -566,14 +649,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!duckemon.isDiscovered && duckemon.unlockMethod === 'qp' && totalQPAllTime >= duckemon.unlockValue) {
                     duckemon.isDiscovered = true;
                     newlyDiscoveredByQP = true;
-                    if (typeof renderDuckemon === 'function') renderDuckemon(duckemon); // Update in main list
                     console.log(`Discovered Duckemon by QP: ${duckemon.name}`);
+                    // The call to renderDuckemon(duckemon) is removed from here.
                 }
             });
-            if (newlyDiscoveredByQP && typeof renderFullDuckedex === 'function') {
-                const duckedexTab = document.getElementById('duckedexTab');
-                if (duckedexTab && duckedexTab.style.display !== 'none') {
-                    renderFullDuckedex();
+
+            if (newlyDiscoveredByQP) {
+                if (typeof renderAllDuckemon === 'function') {
+                    renderAllDuckemon(); // Call renderAllDuckemon to update the sorted list
+                }
+                if (typeof renderFullDuckedex === 'function') {
+                    const duckedexTab = document.getElementById('duckedexTab');
+                    if (duckedexTab && duckedexTab.style.display !== 'none') {
+                        renderFullDuckedex();
+                    }
                 }
             }
         }, 100);
@@ -682,7 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // currentDuckemonState[chosenDuckemonId].owned++; // Optionally give the first one free
             alert(`Congratulations! Your ${eggData.name} hatched into a ${currentDuckemonState[chosenDuckemonId].name}!`);
 
-            if (typeof renderDuckemon === 'function') renderDuckemon(currentDuckemonState[chosenDuckemonId]); // Update in generator list
+            if (typeof renderAllDuckemon === 'function') renderAllDuckemon(); // Update main generator list for sorting
             if (typeof renderFullDuckedex === 'function') {
                 const duckedexTab = document.getElementById('duckedexTab');
                 if (duckedexTab && duckedexTab.style.display !== 'none') renderFullDuckedex();
