@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Game State Variables for clicker sound
+    let isClickerQuackEnabled = true;
+    const clickerQuackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
+    clickerQuackSound.preload = 'auto'; // Optional: helps ensure sound is ready
+
     // DOM Elements
     const clickableDuckV2 = document.getElementById('clickableDuckV2');
     const qpAmountDisplay = document.getElementById('qpAmount');
@@ -388,7 +393,77 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function buyUpgrade(upgradeId) { /* ... same ... */ const upgrade = upgrades.find(u => u.id === upgradeId); if (upgrade && !upgrade.purchased && qp >= upgrade.cost) { qp -= upgrade.cost; upgrade.purchased = true; applyUpgradeEffect(upgrade); renderUpgrade(upgrade); updateDisplays(); renderAvailableUpgrades();}}
     function buyGFUpgrade(gfUpgradeId) { /* ... same ... */ const gfUpgrade = gfUpgrades.find(u => u.id === gfUpgradeId); if (gfUpgrade && !gfUpgrade.purchased && goldenFeathers >= gfUpgrade.cost) {goldenFeathers -= gfUpgrade.cost; gfUpgrade.purchased = true; applyAllGFUpgradeEffects(); renderGFUpgrade(gfUpgrade); renderAllGFUpgrades(); updateDisplays(); }}
-    function playQuackSound() { /* ... same ... */ if (typeof isQuackEnabled !== 'undefined' && isQuackEnabled && typeof quackSound !== 'undefined' && quackSound.play) { quackSound.currentTime = 0; quackSound.play();}}
+
+    function applyLevelBasedVisuals(level) {
+        const bodyElement = document.body;
+        // Attempt to get the YouTube player iframe; 'player' is defined in main.js and attached to window there.
+        const videoBgIframe = (typeof window.player !== 'undefined' && typeof window.player.getIframe === 'function') ? window.player.getIframe() : null;
+        const glitterTexts = document.querySelectorAll('.glitter-text'); // Get all glitter texts
+
+        // Reset classes that might conflict
+        bodyElement.classList.remove('level-10-weirdness', 'level-3-visuals', 'level-5-visuals', 'level-7-visuals');
+        // Reset animations on glitter texts to default before applying new ones
+        glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite');
+
+
+        switch (level) {
+            case 1:
+                if (videoBgIframe) videoBgIframe.style.filter = 'brightness(1.2) contrast(1.1)';
+                break;
+            case 3:
+                bodyElement.style.backgroundColor = '#050510';
+                if (videoBgIframe) videoBgIframe.style.filter = 'sepia(30%)';
+                glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite, level3Glow 1.5s ease-in-out infinite alternate');
+                bodyElement.classList.add('level-3-visuals');
+                break;
+            case 5:
+                bodyElement.style.backgroundColor = '#100010';
+                if (videoBgIframe) videoBgIframe.style.filter = 'hue-rotate(45deg) saturate(1.5)';
+                 glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite, level5Pulse 1s ease-in-out infinite alternate');
+                bodyElement.classList.add('level-5-visuals');
+                break;
+            case 7:
+                bodyElement.style.backgroundColor = '#000000';
+                if (videoBgIframe) videoBgIframe.style.filter = 'invert(80%) grayscale(50%)';
+                glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite, level7Flicker 0.5s steps(1, end) infinite');
+                bodyElement.classList.add('level-7-visuals');
+                break;
+            case 10:
+                bodyElement.style.backgroundColor = '#0a0a0a';
+                if (videoBgIframe) videoBgIframe.style.filter = 'blur(2px) brightness(0.8)';
+                glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite, level10Chaos 2s ease-in-out infinite alternate');
+                bodyElement.classList.add('level-10-weirdness');
+                break;
+            default:
+                if (level > 10) {
+                     bodyElement.classList.add('level-10-weirdness'); // Persist or enhance level 10+
+                     if (videoBgIframe) videoBgIframe.style.filter = `blur(${Math.min(level-9, 5)}px) brightness(0.7) hue-rotate(${ (level-10) * 10}deg) saturate(2)`;
+                } else if (level < 1) { // Reset for very low levels if not covered by case 1 or others
+                     bodyElement.style.backgroundColor = '#000'; // Default body bg
+                     if (videoBgIframe) videoBgIframe.style.filter = 'none'; // Default filter
+                     glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite'); // Default animation
+                } else if (level === 2 || level === 4 || level === 6 || level === 8 || level === 9 ) {
+                    // Explicitly reset to a more 'normal' state for levels that don't have specific effects
+                    // but are between levels that do, to avoid style leakage if a direct reset isn't hit.
+                    // For example, if level 3 has sepia, and level 5 has hue-rotate, what about level 4?
+                    // This example resets to a fairly neutral state.
+                     bodyElement.style.backgroundColor = '#000';
+                     if (videoBgIframe) videoBgIframe.style.filter = (level === 2) ? 'brightness(1.2) contrast(1.1)' : 'none'; // Keep L1 effect for L2 or reset
+                     glitterTexts.forEach(gt => gt.style.animation = 'glitter 6s linear infinite');
+                }
+                break;
+        }
+    }
+
+    function playQuackSound() {
+        // This function now uses isClickerQuackEnabled and clickerQuackSound
+        if (isClickerQuackEnabled && clickerQuackSound && typeof clickerQuackSound.play === 'function') {
+            clickerQuackSound.currentTime = 0;
+            // Change pitch: playbackRate between 0.8 and 1.2 (approx)
+            clickerQuackSound.playbackRate = 0.8 + Math.random() * 0.4;
+            clickerQuackSound.play().catch(error => console.error("Error playing clicker quack sound:", error));
+        }
+    }
 
     // Super Level Functions
     function enterSuperLevel(dimensionName) { if (dimensionName === 'heaven') { currentDimension = 'heaven'; console.log("Entered Duck Heaven!"); } updateDisplays(); }
@@ -402,6 +477,43 @@ document.addEventListener('DOMContentLoaded', () => {
     if (rebirthButton) rebirthButton.addEventListener('click', performRebirth); else console.error("#rebirthButton not found");
     if (ascendToHeavenButton) ascendToHeavenButton.addEventListener('click', () => enterSuperLevel('heaven')); else console.error("#ascendToHeavenButton not found");
     if (returnToNormalPlaneButton) returnToNormalPlaneButton.addEventListener('click', returnToNormalPlane); else console.error("#returnToNormalPlaneButton not found");
+
+    const clickerQuackToggleBtn = document.getElementById('clickerQuackToggleBtn');
+    if (clickerQuackToggleBtn) {
+        clickerQuackToggleBtn.addEventListener('click', () => {
+            isClickerQuackEnabled = !isClickerQuackEnabled;
+            clickerQuackToggleBtn.textContent = isClickerQuackEnabled ? 'Quack Sound: ON' : 'Quack Sound: OFF';
+            clickerQuackToggleBtn.style.backgroundColor = isClickerQuackEnabled ? '#ffff00' : '#ff69b4'; // Yellow for ON, Pink for OFF
+        });
+        // Initialize button text and style
+        clickerQuackToggleBtn.textContent = isClickerQuackEnabled ? 'Quack Sound: ON' : 'Quack Sound: OFF';
+        clickerQuackToggleBtn.style.backgroundColor = isClickerQuackEnabled ? '#ffff00' : '#ff69b4';
+    } else {
+        console.error("#clickerQuackToggleBtn not found.");
+    }
+
+    // Event listener for 'Q' key press
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'q' || event.key === 'Q') {
+            // Check if the Duck Clicker game tab is active
+            const duckClickerTab = document.getElementById('duckClickerTab');
+            if (duckClickerTab) {
+                const style = window.getComputedStyle(duckClickerTab);
+                if (style.display !== 'none') {
+                    manualClick(); // manualClick() already calls playQuackSound()
+                }
+            } else {
+                // This case might occur if the HTML structure changes or ID is incorrect.
+                // For robustness, if 'duckClickerTab' isn't found, it implies a structural issue
+                // or the game isn't using tabs as expected.
+                // console.warn("'duckClickerTab' not found. 'Q' key press will not be restricted to active tab or may not work as intended.");
+                // As a fallback, if the primary game area is always somewhat available,
+                // and not strictly tied to tabs, one might call manualClick() here,
+                // but the requirement is to check if the game is "active".
+                // The current check for `duckClickerTab`'s display style is the best approach given the tab structure.
+            }
+        }
+    });
 
     // --- Start Game & Error Checks ---
     if (!qpAmountDisplay || !qpPerSecondDisplay || !qpPerClickDisplay || !generatorsListContainer || !upgradesListContainer || !gfUpgradesListContainer || !playerLevelDisplay || !nextLevelQPDisplay || !celestialPortalSection || !superLevelDisplayArea) {
