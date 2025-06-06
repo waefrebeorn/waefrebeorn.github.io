@@ -52,6 +52,11 @@
             75% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff; }
             100% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
         }
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; }
+            50% { box-shadow: 0 0 20px #ff00ff, 0 0 30px #ff00ff; }
+            100% { box-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff; }
+        }
         .merch-link {
             font-size: 18px;
             color: #fff;
@@ -61,11 +66,179 @@
             border-radius: 25px;
             margin-bottom: 20px;
             transition: all 0.3s ease;
+            animation: glow 1.5s infinite alternate;
         }
         .merch-link:hover {
             background-color: #00ffff;
             transform: scale(1.1);
+            /* Ensure hover effect overrides glow if needed, or combines well */
+            /* For box-shadow, the hover could temporarily pause or alter glow if desired */
         }
+        #clickableDuck:hover {
+            transform: scale(1.1);
+        }
+        #retroArcadeSection iframe {
+            max-width: 100%; /* Ensure iframe doesn't overflow its container */
+            border: 3px solid #00ffff; /* Add a border to make them stand out */
+            border-radius: 10px;
+        }
+
+        /* Duck Clicker v2 Styling */
+        #duckClickerGame { /* Already has game-container class, ensure text-align if needed */
+            text-align: center; /* Was inline, can be here */
+        }
+
+        #clickerMainArea {
+            padding: 20px;
+            background-color: rgba(255, 255, 0, 0.15); /* Brighter yellow tint */
+            border-radius: 15px;
+            border: 2px solid #ffff00;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+        }
+
+        #clickableDuckV2 {
+            width: 120px; /* Was inline */
+            height: auto; /* Was inline */
+            cursor: pointer; /* Was inline */
+            margin-bottom: 20px; /* Increased margin */
+            border: 3px solid #ff00ff; /* Changed border to magenta */
+            border-radius: 15px; /* Slightly more rounded */
+            transition: transform 0.1s ease-out;
+        }
+        #clickableDuckV2:hover {
+            transform: scale(1.1);
+        }
+        #clickableDuckV2:active {
+            transform: scale(1.0);
+        }
+
+        #qpAmount {
+            font-weight: bold;
+            color: #ff00ff; /* Ensure high visibility */
+        }
+
+        #gameSectionsWrapper { /* Was inline, can be here */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: flex-start; /* Align items to the top */
+        }
+
+        #generatorsSection, #upgradesSection {
+            min-width: 300px; /* Slightly wider */
+            flex-basis: 45%; /* Try to make them take up roughly half, allowing for wrap */
+            margin: 10px;
+            padding: 15px; /* Increased padding */
+            border-radius: 10px; /* More rounded */
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        #generatorsSection {
+            background-color: rgba(0, 255, 255, 0.15); /* Cyan tint */
+            border: 1px solid #00ffff;
+        }
+
+        #upgradesSection {
+            background-color: rgba(255, 0, 255, 0.15); /* Magenta tint */
+            border: 1px solid #ff00ff;
+        }
+
+        #generatorsSection h3, #upgradesSection h3 {
+            font-size: 24px; /* Larger headings */
+            color: #ffff00;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffff00; /* Thicker border */
+            padding-bottom: 10px;
+        }
+
+        #generatorsListContainer, #upgradesListContainer {
+            max-height: 400px; /* Limit height and allow scroll */
+            overflow-y: auto;
+            padding-right: 10px; /* For scrollbar spacing */
+        }
+
+        /* Styling for dynamically added generator and upgrade items */
+        .generator-item, .upgrade-item {
+            padding: 12px; /* Increased padding */
+            margin-bottom: 12px; /* Increased margin */
+            background-color: rgba(0, 0, 0, 0.5); /* Darker background for contrast */
+            border-radius: 8px;
+            border: 1px solid #555;
+            text-align: left; /* Align text to the left within items */
+        }
+
+        .generator-item h4, .upgrade-item h4 {
+            font-size: 20px; /* Larger item titles */
+            margin-bottom: 8px;
+        }
+        .generator-item h4 { color: #00ffff; } /* Cyan for generator titles */
+        .upgrade-item h4 { color: #ff00ff; } /* Magenta for upgrade titles */
+
+        .generator-item p, .upgrade-item p {
+            font-size: 15px; /* Larger paragraph text */
+            margin-bottom: 6px;
+            color: #eee; /* Lighter text for readability */
+        }
+
+        .generator-item p span, .upgrade-item p span {
+            font-weight: bold;
+            color: #ffff00; /* Yellow for dynamic values */
+        }
+
+        /* General button styling for clicker (can reuse/extend existing if available) */
+        #duckClickerGame button, .buy-generator, .buy-upgrade {
+            font-family: "Comic Sans MS", cursive, sans-serif; /* Match body font */
+            font-size: 15px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.1s ease, background-color 0.2s ease;
+            margin-top: 5px; /* Add some top margin */
+        }
+
+        #duckClickerGame button:hover, .buy-generator:hover, .buy-upgrade:hover {
+            transform: scale(1.05);
+        }
+
+        /* Specific Buy Buttons */
+        .buy-generator, .buy-upgrade {
+            background-color: #ffff00; /* Yellow */
+            color: #000;
+            display: block; /* Make buttons take full width of their parent for easier clicking */
+            width: 100%;
+        }
+        .buy-generator:hover { background-color: #ffdd00; }
+        .buy-upgrade:hover { background-color: #ffdd00; }
+
+        /* Save/Load/Reset buttons */
+        #saveLoadControls button { /* Already styled inline, but this provides a fallback/override */
+            margin: 5px 8px; /* More horizontal margin */
+        }
+        #saveGameButton { background-color: #00ff00; color: #000; }
+        #loadGameButton { background-color: #00ffff; color: #000; }
+        #resetGameButton { background-color: #ff0000; color: #fff; }
+        #saveGameButton:hover { background-color: #00dd00; }
+        #loadGameButton:hover { background-color: #00dddd; }
+        #resetGameButton:hover { background-color: #dd0000; }
+
+        /* Scrollbar styling for webkit browsers (optional enhancement) */
+        #generatorsListContainer::-webkit-scrollbar, #upgradesListContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        #generatorsListContainer::-webkit-scrollbar-track, #upgradesListContainer::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+        #generatorsListContainer::-webkit-scrollbar-thumb, #upgradesListContainer::-webkit-scrollbar-thumb {
+            background-color: #ffff00;
+            border-radius: 4px;
+        }
+        #generatorsListContainer::-webkit-scrollbar-thumb:hover, #upgradesListContainer::-webkit-scrollbar-thumb:hover {
+            background-color: #ffdd00;
+        }
+
         .game-container {
             display: flex;
             flex-direction: column;
@@ -178,201 +351,84 @@
         </div>
         <button id="playButton">Quack: ON</button>
         <button id="soundButton">Video Sound: OFF</button>
+
+        <div class="game-container" id="duckClickerGame" style="text-align: center;">
+            <h2 class="glitter-text" style="font-size: 32px; margin-top: 30px; margin-bottom: 20px;">Endless Duck Meme Clicker</h2>
+
+            <!-- Main Click & Stats Area -->
+            <div id="clickerMainArea" style="margin-bottom: 25px; padding: 15px; background-color: rgba(255,255,0,0.1); border-radius: 10px;">
+                <img src="" id="clickableDuckV2" alt="Click the Mighty Duck!" style="width: 120px; height: auto; cursor: pointer; margin-bottom: 15px; border: 3px solid #ffff00; border-radius: 10px;">
+                <p style="font-size: 24px; margin-bottom: 5px; color: #ff00ff;">Quack Points (QP): <span id="qpAmount">0</span></p>
+                <p style="font-size: 16px; margin-bottom: 5px; color: #00ffff;">QP per second: <span id="qpPerSecond">0</span></p>
+                <p style="font-size: 16px; margin-bottom: 15px; color: #00ffff;">QP per click: <span id="qpPerClick">1</span></p>
+            </div>
+
+            <!-- Game Sections Wrapper (for potential flex layout) -->
+            <div id="gameSectionsWrapper" style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+
+                <!-- Generators Section -->
+                <div id="generatorsSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(0, 255, 255, 0.1); border-radius: 8px; border: 1px solid #00ffff;">
+                    <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Generators</h3>
+                    <div id="generatorsListContainer">
+                        <!-- Generator items will be populated here by JavaScript -->
+                        <!-- Example of one item:
+                        <div class="generator-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
+                            <h4 style="font-size: 18px; color: #ff00ff;">Baby Duckling</h4>
+                            <p style="font-size: 14px;">Owned: <span class="gen-owned">0</span> | Output: <span class="gen-output">0.1</span> QP/s</p>
+                            <p style="font-size: 14px;">Cost: <span class="gen-cost">15</span> QP</p>
+                            <button class="buy-generator" data-generator-id="babyDuckling">Buy</button>
+                        </div>
+                        -->
+                    </div>
+                </div>
+
+                <!-- Upgrades Section -->
+                <div id="upgradesSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(255, 0, 255, 0.1); border-radius: 8px; border: 1px solid #ff00ff;">
+                    <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Enhancements</h3>
+                    <div id="upgradesListContainer">
+                        <!-- Upgrade items will be populated here by JavaScript -->
+                        <!-- Example of one item:
+                        <div class="upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
+                            <h4 style="font-size: 18px; color: #00ffff;">Reinforced Beak I</h4>
+                            <p style="font-size: 14px;">Effect: Click power x2</p>
+                            <p style="font-size: 14px;">Cost: <span class="upgrade-cost">100</span> QP</p>
+                            <button class="buy-upgrade" data-upgrade-id="reinforcedBeak1">Buy</button>
+                        </div>
+                        -->
+                    </div>
+                </div>
+
+            </div> <!-- End of gameSectionsWrapper -->
+
+            <!-- Save/Load Controls -->
+            <div id="saveLoadControls" style="margin-top: 30px; padding: 10px; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
+                <button id="saveGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ff00; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Save Progress</button>
+                <button id="loadGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ffff; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Load Progress</button>
+                <button id="resetGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #ff0000; color: #fff; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Reset Game</button>
+            </div>
+        </div>
+
+        <div class="game-container" id="retroArcadeSection" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ffff00;">
+            <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 20px;">Retro Arcade</h2>
+            <div style="margin-bottom: 30px;">
+                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Pac-Man (1983)</h3>
+                <iframe src="https://archive.org/embed/msdos_Pac-Man_1983" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+            </div>
+            <div>
+                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">The Oregon Trail (1990)</h3>
+                <iframe src="https://archive.org/embed/msdos_Oregon_Trail_The_1990" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+            </div>
+            <div style="margin-bottom: 30px; margin-top: 30px;">
+                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Blockout (1989) - 3D Tetris</h3>
+                <iframe src="https://archive.org/embed/msdos_Blockout_1989" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
 
+    <!-- Script includes should be at the end of the body -->
     <script src="duck.js"></script>
-    <script>
-        // Creative YouTube workaround
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        let player;
-        let isVideoSoundOn = false;
-        let isQuackEnabled = true;
-
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('video-background', {
-                videoId: 'geAlLtiUAxY',
-                playerVars: {
-                    autoplay: 1,
-                    loop: 1,
-                    controls: 0,
-                    showinfo: 0,
-                    autohide: 1,
-                    modestbranding: 1,
-                    vq: 'hd1080',
-                    mute: 1
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            event.target.playVideo();
-            event.target.setVolume(50);
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.ENDED) {
-                player.seekTo(0);
-                player.playVideo();
-            }
-        }
-
-        document.getElementById('soundButton').addEventListener('click', () => {
-            isVideoSoundOn = !isVideoSoundOn;
-            if (isVideoSoundOn) {
-                player.unMute();
-                player.seekTo(0);
-                document.getElementById('soundButton').textContent = 'Video Sound: ON';
-            } else {
-                player.mute();
-                document.getElementById('soundButton').textContent = 'Video Sound: OFF';
-            }
-        });
-
-        // Pong game
-        const canvas = document.getElementById('pongCanvas');
-        const ctx = canvas.getContext('2d');
-        let ballX = canvas.width / 2;
-        let ballY = canvas.height / 2;
-        let ballSpeedX = 5;
-        let ballSpeedY = 5;
-        let paddle1Y = canvas.height / 2 - 50;
-        let paddle2Y = canvas.height / 2 - 50;
-        const paddleHeight = 100;
-        const paddleWidth = 10;
-        const ballSize = 20;
-
-        function drawRect(x, y, width, height, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, width, height);
-        }
-
-        function drawDuck(x, y) {
-            const duckImg = new Image();
-            duckImg.src = duckOpen;
-            ctx.drawImage(duckImg, x - ballSize/2, y - ballSize/2, ballSize, ballSize);
-        }
-
-        function movePaddles() {
-            const paddleSpeed = 6;
-            if (paddle1Y + paddleHeight / 2 < ballY) {
-                paddle1Y += paddleSpeed;
-            } else if (paddle1Y + paddleHeight / 2 > ballY) {
-                paddle1Y -= paddleSpeed;
-            }
-
-            if (paddle2Y + paddleHeight / 2 < ballY) {
-                paddle2Y += paddleSpeed;
-            } else if (paddle2Y + paddleHeight / 2 > ballY) {
-                paddle2Y -= paddleSpeed;
-            }
-
-            paddle1Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle1Y));
-            paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle2Y));
-        }
-
-        function resetBall() {
-            ballX = canvas.width / 2;
-            ballY = canvas.height / 2;
-            ballSpeedX = -ballSpeedX;
-            ballSpeedY = 5 * (Math.random() > 0.5 ? 1 : -1);
-        }
-
-        function updateGame() {
-            ballX += ballSpeedX;
-            ballY += ballSpeedY;
-
-            // Top and bottom walls
-            if (ballY - ballSize/2 < 0 || ballY + ballSize/2 > canvas.height) {
-                ballSpeedY = -ballSpeedY;
-                playQuack();
-            }
-
-            // Left paddle
-            if (ballX - ballSize/2 < paddleWidth) {
-                if (ballY > paddle1Y && ballY < paddle1Y + paddleHeight) {
-                    ballSpeedX = -ballSpeedX;
-                    let deltaY = ballY - (paddle1Y + paddleHeight/2);
-                    ballSpeedY = deltaY * 0.35;
-                    playQuack();
-                } else if (ballX < 0) {
-                    resetBall();
-                }
-            }
-
-            // Right paddle
-            if (ballX + ballSize/2 > canvas.width - paddleWidth) {
-                if (ballY > paddle2Y && ballY < paddle2Y + paddleHeight) {
-                    ballSpeedX = -ballSpeedX;
-                    let deltaY = ballY - (paddle2Y + paddleHeight/2);
-                    ballSpeedY = deltaY * 0.35;
-                    playQuack();
-                } else if (ballX > canvas.width) {
-                    resetBall();
-                }
-            }
-
-            movePaddles();
-        }
-
-        function drawGame() {
-            drawRect(0, 0, canvas.width, canvas.height, 'rgba(0,0,0,0.5)');
-            drawRect(0, paddle1Y, paddleWidth, paddleHeight, '#fff');
-            drawRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight, '#fff');
-            drawDuck(ballX, ballY);
-        }
-
-        function gameLoop() {
-            updateGame();
-            drawGame();
-            requestAnimationFrame(gameLoop);
-        }
-
-        gameLoop();
-
-        // Initialize duck images on cube
-        const cubeFaces = document.querySelectorAll('.cube div');
-        cubeFaces.forEach(face => {
-            face.style.backgroundImage = `url("${duckClosed}")`;
-        });
-
-        // Start duck animation
-        setInterval(toggleDuckImage, 1000);
-
-        // Quack sound
-        const quackSound = new Audio('https://www.myinstants.com/media/sounds/quack.mp3');
-        function playQuack() {
-            if (isQuackEnabled) {
-                quackSound.play();
-            }
-        }
-
-        // Quack button
-        document.getElementById('playButton').addEventListener('click', () => {
-            isQuackEnabled = !isQuackEnabled;
-            document.getElementById('playButton').textContent = isQuackEnabled ? 'Quack: ON' : 'Quack: OFF';
-        });
-
-        // Make canvas responsive
-        function resizeCanvas() {
-            const canvas = document.getElementById('pongCanvas');
-            const container = canvas.parentElement;
-            const ratio = canvas.width / canvas.height;
-            const newWidth = Math.min(container.clientWidth, 400);
-            canvas.style.width = newWidth + 'px';
-            canvas.style.height = (newWidth / ratio) + 'px';
-        }
-
-        // Call resizeCanvas on window resize and initially
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-    </script>
+    <script src="main.js"></script>
+    <script src="pong_game.js"></script>
+    <script src="duck_clicker.js"></script>
 </body>
 </html>
