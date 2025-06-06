@@ -15,7 +15,7 @@ const upgradeDefinitions = [
         target: "click", // 'click', 'all', or a specific duckemon ID
         multiplier: 1.5,
         purchased: false,
-        icon: "icons/click_upgrade_1.png" // Placeholder icon path
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62962-anvil-icon.png"
     },
     {
         id: "babyDucklingBoost1",
@@ -26,7 +26,7 @@ const upgradeDefinitions = [
         target: "babyDuckling", // Assuming 'babyDuckling' is an ID in allDuckemonData
         multiplier: 1.5,
         purchased: false,
-        icon: "icons/baby_duckling_boost.png"
+        icon: "duck.png"
     },
     {
         id: "allQuackBoost1",
@@ -37,32 +37,54 @@ const upgradeDefinitions = [
         target: "all",
         multiplier: 1.2,
         purchased: false,
-        icon: "icons/all_quack_boost.png"
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-people-bodyparts/48/11035-busts-in-silhouette-icon.png"
+    },
+    {
+        id: "qKeyAutoclickRate1",
+        name: "Swift Q-Pressing I",
+        description: "Increases Q-key auto-click rate by 5 clicks/sec.",
+        cost: 5000,
+        currency: "qp",
+        target: "qKeyAutoclickRate",
+        value: 5,
+        purchased: false,
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-activities/48/52700-stopwatch-icon.png"
+    },
+    {
+        id: "qKeyAutoclickRate2",
+        name: "Rapid Q-Pressing II",
+        description: "Further increases Q-key auto-click rate by 10 clicks/sec.",
+        cost: 25000,
+        currency: "qp",
+        target: "qKeyAutoclickRate",
+        value: 10,
+        purchased: false,
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-activities/48/52700-stopwatch-icon.png"
     }
 ];
 
 const gfUpgradeDefinitions = [
     {
         id: "goldenClickBoost1",
-        name: "Golden Click Enhancer I",
-        description: "Permanently increases click power by 100% (x2).",
+        name: "Golden Quack Coinage I",
+        description: "Permanently increases click power by 100% (x2). Each click mints more!",
         cost: 5,
         currency: "gf",
         target: "click",
         multiplier: 2,
         purchased: false,
-        icon: "icons/golden_click_1.png"
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62939-coin-icon.png"
     },
     {
         id: "goldenAllQpsBoost1",
-        name: "Golden Duck Blessing I",
-        description: "Permanently increases QPS of all Duckemon by 50%.",
+        name: "Golden Duck Hoard I",
+        description: "Permanently increases QPS of all Duckemon by 50%. A treasure trove of quacks!",
         cost: 10,
         currency: "gf",
         target: "all",
         multiplier: 1.5,
         purchased: false,
-        icon: "icons/golden_all_qps_1.png"
+        icon: "https://icons.iconarchive.com/icons/google/noto-emoji-objects/48/62941-money-bag-icon.png"
     }
 ];
 
@@ -271,6 +293,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalQPAllTime = 0;
         let playerLevel = 0;
 
+        // Q-key Autoclicker variables
+        let qAutoClickIntervalId = null;
+        let isQautoClickActive = false;
+        let qAutoClickRatePerSecond = 10; // Clicks per second when Q is held
+
     let ownedEggs = []; // Array of egg objects: { id: uniqueId, type: "CommonEgg", hatchStartTime: Date.now() }
     const eggTypes = {
         "CommonEgg": {
@@ -379,6 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function initializeGame() {
             qp = 0; qpPerClick = 1; qpPerSecond = 0; goldenFeathers = 0; totalQPAllTime = 0; playerLevel = 0;
+            qAutoClickRatePerSecond = 10; // Reset Q-key autoclick rate to base
             currentDuckemonState = JSON.parse(JSON.stringify(allDuckemonData)); // Use loaded data
             Object.values(currentDuckemonState).forEach(duckemon => {
                 duckemon.currentCost = duckemon.baseCost;
@@ -404,6 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 goldenFeathers: goldenFeathers, totalQPAllTime: totalQPAllTime, playerLevel: playerLevel,
                 upgrades: typeof upgradeDefinitions !== 'undefined' ? upgradeDefinitions.map(u => ({ id: u.id, purchased: u.purchased })) : [],
                 gfUpgrades: typeof gfUpgradeDefinitions !== 'undefined' ? gfUpgradeDefinitions.map(u => ({ id: u.id, purchased: u.purchased })) : [],
+                qAutoClickRatePerSecond: qAutoClickRatePerSecond, // Save current Q-key autoclick rate
                 lastSaveTime: Date.now(),
             ownedEggs: ownedEggs,
             nextEggId: nextEggId
@@ -417,6 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const gameState = JSON.parse(savedState);
                 qp = gameState.qp || 0; qpPerClick = gameState.qpPerClick || 1; goldenFeathers = gameState.goldenFeathers || 0;
                 totalQPAllTime = gameState.totalQPAllTime || 0; playerLevel = gameState.playerLevel || 0;
+                qAutoClickRatePerSecond = gameState.qAutoClickRatePerSecond || 10; // Load Q-key autoclick rate, default to 10
             ownedEggs = gameState.ownedEggs || [];
             nextEggId = gameState.nextEggId || 0;
 
@@ -556,6 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const feathersToGain = Math.floor(Math.sqrt(totalQPAllTime / 1e9)) + playerLevel;
                 if (confirm(`Are you sure you want to rebirth? You will gain ${feathersToGain} Golden Feathers but lose all QP, Ducks, and regular Upgrades.`)) {
                     goldenFeathers += feathersToGain; qp = 0; qpPerClick = 1; totalQPAllTime = 0; playerLevel = 0;
+                    qAutoClickRatePerSecond = 10; // Reset Q-key autoclick rate to base on rebirth
                     Object.values(currentDuckemonState).forEach(duckemon => {
                         const baseData = allDuckemonData[duckemon.id]; duckemon.owned = 0;
                         duckemon.currentCost = baseData.baseCost; duckemon.currentQPS = baseData.baseQPS;
@@ -582,6 +613,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dtu = currentDuckemonState[upgrade.target]; if (dtu.isDiscovered) {
                     if (upgrade.effect === 'multiplyBase') dtu.currentQPS = allDuckemonData[dtu.id].baseQPS * upgrade.multiplier;
                     else dtu.currentQPS *= upgrade.multiplier;
+                }
+            } else if (upgrade.target === "qKeyAutoclickRate") {
+                qAutoClickRatePerSecond += upgrade.value;
+                console.log(`Q-key auto-click rate upgraded to: ${qAutoClickRatePerSecond} clicks/sec.`);
+                // If Q auto-click is currently active, restart it with the new rate
+                if (isQautoClickActive && qAutoClickIntervalId !== null) {
+                    clearInterval(qAutoClickIntervalId);
+                    qAutoClickIntervalId = setInterval(performQautoClick, 1000 / qAutoClickRatePerSecond);
                 }
             }
             if (upgrade.currency === 'gf') applyAllGFUpgradeEffects();
@@ -637,6 +676,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial render of egg slots in case game is loaded with eggs
     if (typeof renderEggSlots === 'function') renderEggSlots();
+
+        // --- Q-key Autoclicker Functions ---
+        function performQautoClick() {
+            qp += qpPerClick;
+            totalQPAllTime += qpPerClick;
+            updateQPDisplay();
+            checkLevelUp(); // Check for level ups or other unlocks triggered by QP gain
+
+            // Visual Feedback
+            const duckImg = document.getElementById('clickableDuckV2'); // Re-fetch in case it was re-rendered
+            if (duckImg) {
+                duckImg.src = 'duck_open.png';
+                setTimeout(() => { if (duckImg) duckImg.src = 'duck_closed.png'; }, 50);
+            }
+
+            // Sound Feedback (accessing isClickerQuackEnabled and clickerQuackSound from outer scope)
+            if (isClickerQuackEnabled && clickerQuackSound) {
+                clickerQuackSound.currentTime = 0;
+                clickerQuackSound.play().catch(error => console.error("Error playing quack sound during auto-click:", error));
+            }
+        }
+
+        function handleQKeyDown(event) {
+            if ((event.key === 'q' || event.key === 'Q') && !isQautoClickActive) {
+                isQautoClickActive = true;
+                performQautoClick(); // Perform first click immediately
+                if (qAutoClickIntervalId === null) { // Ensure no multiple intervals
+                    qAutoClickIntervalId = setInterval(performQautoClick, 1000 / qAutoClickRatePerSecond);
+                }
+            }
+        }
+
+        function handleQKeyUp(event) {
+            if (event.key === 'q' || event.key === 'Q') {
+                if (qAutoClickIntervalId !== null) {
+                    clearInterval(qAutoClickIntervalId);
+                    qAutoClickIntervalId = null;
+                }
+                isQautoClickActive = false;
+            }
+        }
+
+        document.addEventListener('keydown', handleQKeyDown);
+        document.addEventListener('keyup', handleQKeyUp);
+
+        // --- End Q-key Autoclicker Functions ---
+
 
         setInterval(() => {
             qp += qpPerSecond / 10; totalQPAllTime += qpPerSecond / 10; updateQPDisplay(); checkLevelUp();
@@ -780,7 +866,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ownedEggs.splice(eggSlotIndex, 1); // Remove egg
         renderEggSlots();
-        // updateDisplays(); // General UI update // updateDisplays is not defined. updateQPDisplay and checkLevelUp are usually sufficient.
+        // updateDisplays(); was here, but it's not defined. updateQPDisplay and checkLevelUp are called below.
         updateQPDisplay(); // Ensure QP display updates if consolation prize was given.
         checkLevelUp(); // Check if discovering this Duckemon leads to a level up or other unlocks.
     }
