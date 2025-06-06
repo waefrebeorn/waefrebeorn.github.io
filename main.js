@@ -6,7 +6,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 let player;
 let isVideoSoundOn = false;
-let isQuackEnabled = true; // Added this from index.html script
+let isQuackEnabled = false; // Added this from index.html script
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('video-background', {
