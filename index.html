@@ -378,12 +378,12 @@
             background-position: center;
             opacity: 0.8;
         }
-        .front  { transform: rotateY(0deg) translateZ(50px); }
-        .back   { transform: rotateY(180deg) translateZ(50px); }
-        .right  { transform: rotateY(90deg) translateZ(50px); }
-        .left   { transform: rotateY(-90deg) translateZ(50px); }
-        .top    { transform: rotateX(90deg) translateZ(50px); }
-        .bottom { transform: rotateX(-90deg) translateZ(50px); }
+        .front  { transform: rotateY(0deg) translateZ(50px); background-image: url('duck_open.png'); }
+        .back   { transform: rotateY(180deg) translateZ(50px); background-image: url('duck_closed.png'); }
+        .right  { transform: rotateY(90deg) translateZ(50px); background-image: url('duck_closed.png'); }
+        .left   { transform: rotateY(-90deg) translateZ(50px); background-image: url('duck_closed.png'); }
+        .top    { transform: rotateX(90deg) translateZ(50px); background-image: url('duck_closed.png'); }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); background-image: url('duck_closed.png'); }
         @keyframes spin {
             0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }

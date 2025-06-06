@@ -7,6 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const clickableDuckV2 = document.getElementById('clickableDuckV2');
+    if (clickableDuckV2) { clickableDuckV2.src = duckClosed; }
+
+    // Implement Click Animation:
+    if (clickableDuckV2) {
+        clickableDuckV2.addEventListener('mousedown', () => {
+            clickableDuckV2.src = duckOpen;
+            // Play quack sound if enabled (existing logic)
+            if (isClickerQuackEnabled && clickerQuackSound) {
+                clickerQuackSound.currentTime = 0; // Rewind to start
+                clickerQuackSound.play().catch(error => console.error("Error playing quack sound:", error));
+            }
+        });
+    }
+
+    if (clickableDuckV2) {
+        clickableDuckV2.addEventListener('mouseup', () => {
+            clickableDuckV2.src = duckClosed;
+        });
+    }
+
     const qpAmountDisplay = document.getElementById('qpAmount');
     const qpPerSecondDisplay = document.getElementById('qpPerSecond');
     const qpPerClickDisplay = document.getElementById('qpPerClick');
@@ -384,6 +404,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }).filter(id => id !== null); // Filter out any nulls from parsing errors
 
     let youtubeMemes = [];
+
+    // Functions for YouTube Meme Cavern
+    function displayYoutubeMeme(videoId) {
+        const container = document.getElementById('youtubeLinksContainer');
+        if (container && videoId) {
+            const memeDiv = document.createElement('div');
+            memeDiv.className = 'memeDiv'; // For styling & structure
+
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+            iframe.width = "560"; // Standard 16:9, can be styled with CSS later
+            iframe.height = "315";
+            iframe.frameBorder = "0";
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+
+            memeDiv.appendChild(iframe);
+            container.appendChild(memeDiv);
+        }
+    }
+
+    function updateMemeCavern() {
+        const container = document.getElementById('youtubeLinksContainer');
+        if (!container) {
+            console.error('Meme Cavern container not found!');
+            return;
+        }
+        container.innerHTML = ''; // Clear previous memes to prevent duplication
+
+        // Determine how many memes to show based on playerLevel
+        const memesToShow = Math.min(playerLevel + 5, youtubeVideoIDs.length);
+
+        for (let i = 0; i < memesToShow; i++) {
+            if (youtubeVideoIDs[i]) {
+                displayYoutubeMeme(youtubeVideoIDs[i]);
+            }
+        }
+    }
+
+    // Event listener for Meme Cavern Tab
+    const memeCavernTabButton = document.querySelector('.tab-link[onclick*="memeCavernTab"]');
+    if (memeCavernTabButton) {
+        memeCavernTabButton.addEventListener('click', () => {
+            updateMemeCavern();
+        });
+    } else {
+        console.error('Meme Cavern tab button not found for event listener.');
+    }
 
     // Game State Variables
     let qp = 0;
