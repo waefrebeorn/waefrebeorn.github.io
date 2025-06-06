@@ -718,6 +718,8 @@
                 <button class="tab-link active" onclick="openGameTab(event, 'duckClickerTab')">Duck Clicker</button>
                 <button class="tab-link" onclick="openGameTab(event, 'retroArcadeTab')">Retro Arcade</button>
                 <button class="tab-link" onclick="openGameTab(event, 'memeCavernTab')">Meme Cavern</button>
+            <button class="tab-link" onclick="openGameTab(event, 'duckedexTab')">Duckedex</button>
+            <button class="tab-link" onclick="openGameTab(event, 'hatcheryTab')">Hatchery</button>
                <button id="soundButton">Video Sound: OFF</button> <!-- Moved button -->
             </div>
 
@@ -835,6 +837,21 @@
                 <p style="margin-top: 15px; font-size: 14px; color: #ccc;">Discover memes as you level up! Older, more mysterious memes may appear deeper in your journey.</p>
             </div>
 
+        <div id="duckedexTab" class="game-tab-content" style="display:none;">
+            <h2>Duckedex - Gotta Quack 'Em All!</h2>
+            <div id="duckedexGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding:10px;">
+                <!-- Duckedex entries will be populated here by JavaScript -->
+            </div>
+        </div>
+        <div id="hatcheryTab" class="tab-content" style="display:none;">
+            <h2>Duckemon Hatchery</h2>
+            <p>Incubate your precious Duckemon Eggs here!</p>
+            <button id="acquireCommonEggTestBtn" style="padding: 8px 12px; margin-bottom: 15px;">Get Common Egg (Test)</button>
+            <button id="acquireMysteriousEggTestBtn" style="padding: 8px 12px; margin-bottom: 15px;">Get Mysterious Egg (Test)</button>
+            <div id="eggSlotsContainer" style="display: flex; flex-wrap: wrap; gap: 15px; padding: 10px; border: 1px solid #444; min-height: 100px; background-color: #1a1a1a; border-radius: 5px;">
+                <!-- Egg slots will be populated here by JavaScript -->
+            </div>
+        </div>
 <style>
 /* Additional style for YouTube links, can be merged into main style block later if preferred */
 #youtubeLinksContainer .memeDiv a { /* Assuming memeDiv is the class for the div wrapping each link */
