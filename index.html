@@ -323,9 +323,13 @@
             text-decoration: none;
         }
         #wubuSphereVisualizer iframe {
-            /* Styles already applied via inline, max-width for responsiveness is good. */
-            /* Additional shadow could be added if desired */
+            width: 100%;
+            height: 80vh;
+            max-width: 100%; /* Ensure this is explicitly set */
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
             box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            display: block; /* Iframes are inline by default, block can help with width/height consistency */
         }
 
         .game-container {
@@ -378,6 +382,35 @@
             0% { transform: translateZ(-50px) rotateX(0deg) rotateY(0deg); }
             100% { transform: translateZ(-50px) rotateX(360deg) rotateY(360deg); }
         }
+
+        /* Keyframes for level-based visual effects */
+        @keyframes level3Glow {
+            0%, 100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ff00, 0 0 40px #00ff00; }
+            50% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ff00, 0 0 50px #00ff00; }
+        }
+        @keyframes level5Pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes level7Flicker {
+            0%, 100% { opacity: 1; }
+            25% { opacity: 0.3; }
+            50% { opacity: 1; }
+            75% { opacity: 0.6; }
+        }
+        @keyframes level10Chaos {
+            0% { transform: skewX(0deg) skewY(0deg); color: #ff00ff; }
+            25% { transform: skewX(5deg) skewY(2deg); color: #00ffff; }
+            50% { transform: skewX(-5deg) skewY(-2deg); color: #ffff00; }
+            75% { transform: skewX(2deg) skewY(-5deg); color: #ff0000; }
+            100% { transform: skewX(0deg) skewY(0deg); color: #ff00ff; }
+        }
+        /* Placeholder for class-based styles if needed later */
+        .level-10-weirdness .glitter-text {
+             /* Example: might add more specific styles here if JS wasn't directly setting animation */
+        }
+
         #playButton, #soundButton {
             font-size: 16px;
             padding: 10px 20px;
@@ -394,28 +427,276 @@
             transform: scale(1.1);
         }
 
+        /* Tabbed Games Area */
+        #gamesArea {
+            width: 100%;
+            max-width: 1200px; /* Optional: constrain max width of games area */
+            margin: 20px auto; /* Center it and add some top/bottom margin */
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05); /* Slight tint for the games area */
+            border-radius: 10px;
+        }
+
+        .tabs-navigation {
+            display: flex;
+            flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ffff00; /* Separator line */
+            padding-bottom: 10px;
+        }
+
+        .tab-link {
+            font-family: "Comic Sans MS", cursive, sans-serif;
+            padding: 10px 20px;
+            margin: 5px;
+            border: 2px solid #ff00ff;
+            border-radius: 20px; /* Rounded buttons */
+            background-color: transparent;
+            color: #ff00ff;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #ff00ff;
+        }
+
+        .tab-link:hover {
+            background-color: #ff00ff;
+            color: #000;
+            text-shadow: 0 0 8px #000;
+            transform: translateY(-2px);
+        }
+
+        .tab-link.active {
+            background-color: #ffff00; /* Yellow for active tab */
+            color: #000;
+            border-color: #ffff00;
+            text-shadow: 0 0 5px #000;
+            box-shadow: 0 0 15px #ffff00;
+        }
+
+        .game-tab-content {
+            padding: 10px 0; /* Add some padding above/below game content if needed */
+            border-top: none; /* Ensure no double border if tabs had bottom border */
+            width: 100%; /* Ensure tab content takes full width of its parent */
+        }
+
+        /* Responsive adjustments for tabs if necessary */
+        @media (max-width: 480px) {
+            .tab-link {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+            .tabs-navigation {
+                margin-bottom: 15px;
+                padding-bottom: 5px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .content {
+                padding: 10px; /* Reduced from 20px */
+            }
             .glitter-text {
-                font-size: 24px;
+                font-size: 22px !important; /* Further reduced from 24px, original 36px */
+                margin-bottom: 15px; /* Reduced from 20px */
             }
+            /* Reduce font size for general headings */
+            h2, .glitter-text[style*="font-size: 32px"], .glitter-text[style*="font-size: 28px"] { /* Target specific inline styled glitter texts too */
+                font-size: 20px !important; /* Important to override inline styles */
+                margin-bottom: 15px !important;
+            }
+            h3, #generatorsSection h3, #upgradesSection h3, #goldenFeatherUpgradesSection h3, #rebirthSection h3, #retroArcadeSection h3, #socialAndConnectSection h3, #wubuSphereVisualizer h3, #celestialPortalSection h3 {
+                font-size: 18px !important; /* Important to override inline styles */
+                margin-bottom: 10px !important;
+                padding-bottom: 5px !important;
+            }
+            p, .generator-item p, .upgrade-item p, .gf-upgrade-item p { /* General paragraph text */
+                font-size: 14px;
+            }
+
             .merch-link {
-                font-size: 16px;
+                font-size: 14px !important; /* Reduced from 16px */
+                padding: 8px 15px !important; /* Reduced padding */
+                margin-bottom: 15px !important; /* Reduced margin */
             }
+
+            #duckClickerGame, .game-container[style*="margin-top: 40px"] { /* Target retro arcade and others */
+                margin-top: 20px !important; /* Reduce top margin */
+                margin-bottom: 15px !important; /* Reduce bottom margin */
+                padding-top: 10px !important; /* Reduce top padding */
+            }
+            #clickerMainArea, #generatorsSection, #upgradesSection, #goldenFeatherUpgradesSection, #rebirthSection, #saveLoadControls,
+            #socialAndConnectSection, #superLevelDisplayArea, #celestialPortalSection {
+                padding: 10px !important; /* Reduced padding for various sections, !important for inline styles */
+            }
+             /* Ensure sections in gameSectionsWrapper take full width if they wrap */
+            #generatorsSection, #upgradesSection, #goldenFeatherUpgradesSection {
+                flex-basis: 100% !important; /* Make them stack full width */
+                min-width: unset !important; /* Remove min-width constraint */
+                margin: 10px 0 !important; /* Adjust margin for stacked layout */
+            }
+
+            /* Apply general iframe styling for retro arcade */
+            #retroArcadeSection iframe {
+                width: 100% !important;
+                height: auto;
+                min-height: 300px;
+            }
+            /* WUBU SPHERE IFRAME: height is 80vh from general style, width 100% from general style.
+               No specific override needed here for 768px unless 80vh needs changing.
+               The min-height: 250px and aspect-ratio are removed as they conflict with 80vh. */
+
+
             #pongCanvas {
                 width: 100%;
-                height: auto;
+                height: auto; /* Already there, just confirming */
             }
             .cube-container {
-                width: 80px;
-                height: 80px;
+                width: 60px; /* Further reduced */
+                height: 60px; /* Further reduced */
+                margin-top: 15px;
             }
             .cube div {
-                width: 80px;
-                height: 80px;
+                width: 60px; /* Further reduced */
+                height: 60px; /* Further reduced */
+                font-size: 1.5rem; /* Adjust if text is on cube faces */
             }
-            #playButton, #soundButton {
-                font-size: 14px;
-                padding: 8px 16px;
+            #playButton, #soundButton, #duckClickerGame button, .buy-generator, .buy-upgrade, #saveLoadControls button, #rebirthButton, #returnToNormalPlaneButton, #ascendToHeavenButton {
+                font-size: 13px !important; /* Reduced font size */
+                padding: 8px 12px !important; /* Reduced padding */
+                margin: 5px !important; /* Adjust margins for tighter spacing */
+            }
+            .buy-generator, .buy-upgrade, .buy-gf-upgrade { /* Ensure these stack buttons still look good */
+                padding: 10px 12px !important;
+            }
+
+            #clickableDuckV2 {
+                width: 100px !important; /* Reduced size */
+                margin-bottom: 10px !important;
+            }
+            #clickerMainArea p { /* Reduce font size for stats */
+                font-size: 15px !important; /* For QP Amount */
+            }
+            #clickerMainArea p[style*="font-size: 16px"], #clickerMainArea p[style*="font-size: 14px"] { /* QPPS, QPPC, Next Level */
+                font-size: 13px !important;
+            }
+             #clickerMainArea p[style*="font-size: 18px"] { /* Player Level */
+                font-size: 14px !important;
+            }
+
+
+            /* Social links adjustments */
+            #socialLinks a {
+                font-size: 13px !important; /* Reduce font size */
+                padding: 6px 10px !important; /* Reduce padding */
+                margin: 5px !important; /* Reduce margin */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 5px; /* Further reduced padding */
+            }
+            .glitter-text {
+                font-size: 18px !important; /* Further reduced */
+                margin-bottom: 10px;
+            }
+            h2, .glitter-text[style*="font-size: 32px"], .glitter-text[style*="font-size: 28px"] {
+                font-size: 17px !important;
+                margin-bottom: 10px !important;
+            }
+            h3, #generatorsSection h3, #upgradesSection h3, #goldenFeatherUpgradesSection h3, #rebirthSection h3, #retroArcadeSection h3, #socialAndConnectSection h3, #wubuSphereVisualizer h3, #celestialPortalSection h3 {
+                font-size: 15px !important;
+                margin-bottom: 8px !important;
+                padding-bottom: 4px !important;
+            }
+            p, .generator-item p, .upgrade-item p, .gf-upgrade-item p {
+                font-size: 12px; /* Further reduced paragraph text */
+            }
+            .generator-item h4, .upgrade-item h4, .gf-upgrade-item h4 {
+                font-size: 14px !important; /* Item titles */
+            }
+
+            .merch-link {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+                margin-bottom: 10px !important;
+            }
+
+            #duckClickerGame, .game-container[style*="margin-top: 40px"] {
+                margin-top: 15px !important;
+                margin-bottom: 10px !important;
+                padding-top: 5px !important;
+            }
+             #clickerMainArea, #generatorsSection, #upgradesSection, #goldenFeatherUpgradesSection, #rebirthSection, #saveLoadControls,
+            #socialAndConnectSection, #superLevelDisplayArea, #celestialPortalSection {
+                padding: 8px !important;
+                margin: 5px 0 !important; /* Ensure full width usage */
+            }
+            /* #gameSectionsWrapper children are already flex-basis 100% from 768px query */
+
+            #retroArcadeSection iframe {
+                min-height: 250px; /* Adjust min height for very small screens */
+            }
+            /* WUBU SPHERE IFRAME: height is 80vh from general style.
+               The min-height: 200px is removed as it could conflict. */
+
+
+            .cube-container {
+                width: 50px;
+                height: 50px;
+                margin-top: 10px;
+            }
+            .cube div {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            #playButton, #soundButton, #duckClickerGame button, .buy-generator, .buy-upgrade, #saveLoadControls button, #rebirthButton, #returnToNormalPlaneButton, #ascendToHeavenButton {
+                font-size: 11px !important;
+                padding: 6px 10px !important;
+                margin: 3px !important;
+            }
+             .buy-generator, .buy-upgrade, .buy-gf-upgrade {
+                padding: 8px 10px !important; /* Ensure tappability */
+            }
+
+
+            #clickableDuckV2 {
+                width: 80px !important;
+                margin-bottom: 8px !important;
+            }
+             #clickerMainArea p { /* Match general p, then specify unique */
+                font-size: 12px !important; /* General p for this breakpoint */
+            }
+            #clickerMainArea p[style*="font-size: 24px"] { /* QP Amount specifically */
+                 font-size: 13px !important;
+            }
+            #clickerMainArea p[style*="font-size: 16px"], #clickerMainArea p[style*="font-size: 14px"] { /* QPPS, QPPC, Next Level */
+                font-size: 11px !important;
+            }
+            #clickerMainArea p[style*="font-size: 18px"] { /* Player Level */
+                font-size: 12px !important;
+            }
+
+            /* Ensure item lists are still usable */
+            .generator-item, .upgrade-item, .gf-upgrade-item {
+                padding: 8px;
+                margin-bottom: 8px;
+            }
+            #generatorsListContainer, #upgradesListContainer, #gfUpgradesListContainer {
+                max-height: 300px; /* Reduce max height for scroll areas */
+            }
+
+
+            #socialLinks a {
+                font-size: 11px !important;
+                padding: 5px 8px !important;
+                margin: 3px auto !important; /* Tighter spacing, auto for horizontal centering */
+                display: block; /* Stack social links for very small screens */
+                width: fit-content; /* Adjust width to content for centered block */
             }
         }
     </style>
@@ -425,102 +706,121 @@
     <div class="content">
         <h1 class="glitter-text">Waefre Beorn's Duck Emporium</h1>
         <a href="https://beaec8-2.myshopify.com/" class="merch-link" target="_blank">🦆 BUY MANGAMER MERCH 🦆</a>
-        <div class="game-container">
-            <canvas id="pongCanvas" width="400" height="300"></canvas>
-            <div class="cube-container">
-                <div id="duckCube" class="cube">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                    <div class="right"></div>
-                    <div class="left"></div>
-                    <div class="top"></div>
-                    <div class="bottom"></div>
-                </div>
-            </div>
-        </div>
-        <button id="playButton">Quack: ON</button>
-        <button id="soundButton">Video Sound: OFF</button>
 
-        <div class="game-container" id="duckClickerGame" style="text-align: center;">
-            <h2 class="glitter-text" style="font-size: 32px; margin-top: 30px; margin-bottom: 20px;">Endless Duck Meme Clicker</h2>
-
-            <!-- Main Click & Stats Area -->
-            <div id="clickerMainArea" style="margin-bottom: 25px; padding: 15px; background-color: rgba(255,255,0,0.1); border-radius: 10px;">
-                <img src="" id="clickableDuckV2" alt="Click the Mighty Duck!" style="width: 120px; height: auto; cursor: pointer; margin-bottom: 15px; border: 3px solid #ffff00; border-radius: 10px;">
-                <p style="font-size: 24px; margin-bottom: 5px; color: #ff00ff;">Quack Points (QP): <span id="qpAmount">0</span></p>
-                <p style="font-size: 16px; margin-bottom: 5px; color: #00ffff;">QP per second: <span id="qpPerSecond">0</span></p>
-                <p style="font-size: 16px; margin-bottom: 15px; color: #00ffff;">QP per click: <span id="qpPerClick">1</span></p>
-                <p style="font-size: 18px; margin-top: 10px; color: #90ee90;">Level: <span id="playerLevelDisplay" style="font-weight: bold;">0</span></p>
-                <p style="font-size: 14px; color: #90ee90;">Next Level at: <span id="nextLevelQPDisplay">---</span> QP</p>
+        <div id="gamesArea">
+            <div class="tabs-navigation">
+                <button class="tab-link active" onclick="openGameTab(event, 'duckClickerTab')">Duck Clicker</button>
+                <button class="tab-link" onclick="openGameTab(event, 'retroArcadeTab')">Retro Arcade</button>
             </div>
 
-            <!-- Game Sections Wrapper (for potential flex layout) -->
-            <div id="gameSectionsWrapper" style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+            <!-- Tab Content will be populated by moving existing game sections here -->
+            <div id="duckClickerTab" class="game-tab-content" style="display:block;">
+                <div class="game-container" id="duckClickerGame" style="text-align: center;">
+                    <h2 class="glitter-text" style="font-size: 32px; margin-top: 30px; margin-bottom: 20px;">Endless Duck Meme Clicker</h2>
 
-                <!-- Generators Section -->
-                <div id="generatorsSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(0, 255, 255, 0.1); border-radius: 8px; border: 1px solid #00ffff;">
-                    <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Generators</h3>
-                    <div id="generatorsListContainer">
-                        <!-- Generator items will be populated here by JavaScript -->
-                        <!-- Example of one item:
-                        <div class="generator-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
-                            <h4 style="font-size: 18px; color: #ff00ff;">Baby Duckling</h4>
-                            <p style="font-size: 14px;">Owned: <span class="gen-owned">0</span> | Output: <span class="gen-output">0.1</span> QP/s</p>
-                            <p style="font-size: 14px;">Cost: <span class="gen-cost">15</span> QP</p>
-                            <button class="buy-generator" data-generator-id="babyDuckling">Buy</button>
+                    <!-- Main Click & Stats Area -->
+                    <div id="clickerMainArea" style="margin-bottom: 25px; padding: 15px; background-color: rgba(255,255,0,0.1); border-radius: 10px;">
+                        <img src="" id="clickableDuckV2" alt="Click the Mighty Duck!" style="width: 120px; height: auto; cursor: pointer; margin-bottom: 15px; border: 3px solid #ffff00; border-radius: 10px;">
+                        <p style="font-size: 24px; margin-bottom: 5px; color: #ff00ff;">Quack Points (QP): <span id="qpAmount">0</span></p>
+                        <p style="font-size: 16px; margin-bottom: 5px; color: #00ffff;">QP per second: <span id="qpPerSecond">0</span></p>
+                        <p style="font-size: 16px; margin-bottom: 15px; color: #00ffff;">QP per click: <span id="qpPerClick">1</span></p>
+                        <p style="font-size: 18px; margin-top: 10px; color: #90ee90;">Level: <span id="playerLevelDisplay" style="font-weight: bold;">0</span></p>
+                        <p style="font-size: 14px; color: #90ee90;">Next Level at: <span id="nextLevelQPDisplay">---</span> QP</p>
+                    </div>
+
+                    <!-- Game Sections Wrapper (for potential flex layout) -->
+                    <div id="gameSectionsWrapper" style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+
+                        <!-- Generators Section -->
+                        <div id="generatorsSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(0, 255, 255, 0.1); border-radius: 8px; border: 1px solid #00ffff;">
+                            <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Generators</h3>
+                            <div id="generatorsListContainer">
+                                <!-- Generator items will be populated here by JavaScript -->
+                                <!-- Example of one item:
+                                <div class="generator-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
+                                    <h4 style="font-size: 18px; color: #ff00ff;">Baby Duckling</h4>
+                                    <p style="font-size: 14px;">Owned: <span class="gen-owned">0</span> | Output: <span class="gen-output">0.1</span> QP/s</p>
+                                    <p style="font-size: 14px;">Cost: <span class="gen-cost">15</span> QP</p>
+                                    <button class="buy-generator" data-generator-id="babyDuckling">Buy</button>
+                                </div>
+                                -->
+                            </div>
                         </div>
-                        -->
+
+                        <!-- Upgrades Section -->
+                        <div id="upgradesSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(255, 0, 255, 0.1); border-radius: 8px; border: 1px solid #ff00ff;">
+                            <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Enhancements</h3>
+                            <div id="upgradesListContainer">
+                                <!-- Upgrade items will be populated here by JavaScript -->
+                                <!-- Example of one item:
+                                <div class="upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
+                                    <h4 style="font-size: 18px; color: #00ffff;">Reinforced Beak I</h4>
+                                    <p style="font-size: 14px;">Effect: Click power x2</p>
+                                    <p style="font-size: 14px;">Cost: <span class="upgrade-cost">100</span> QP</p>
+                                    <button class="buy-upgrade" data-upgrade-id="reinforcedBeak1">Buy</button>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+
+                        <!-- Golden Feather Upgrades Section -->
+                        <div id="goldenFeatherUpgradesSection" style="min-width: 280px; flex-basis: 45%; margin: 10px; padding: 10px; background-color: rgba(255, 215, 0, 0.2); border-radius: 8px; border: 1px solid #ffd700;">
+                            <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px; border-bottom: 1px solid #ffd700; padding-bottom: 5px;">Golden Feather Blessings</h3>
+                            <div id="gfUpgradesListContainer">
+                                <!-- Golden Feather Upgrade items will be populated here by JavaScript -->
+                                <!-- Example:
+                                <div class="gf-upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.4); border-radius: 5px;">
+                                    <h4 style="font-size: 18px; color: #ffd700;">Permanent Click Boost I</h4>
+                                    <p style="font-size: 14px;">Effect: +1 QP per click (Permanent)</p>
+                                    <p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">1</span> GF</p>
+                                    <button class="buy-gf-upgrade" data-gf-upgrade-id="permClickBoost1">Buy with GF</button>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+                    </div> <!-- End of gameSectionsWrapper -->
+
+                    <!-- Rebirth Section -->
+                    <div id="rebirthSection" style="margin-top: 25px; padding: 15px; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; border-radius: 8px; text-align: center;">
+                        <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px;">Rebirth & Golden Feathers</h3>
+                        <p style="font-size: 18px;">Golden Feathers: <span id="goldenFeathersDisplay" style="font-weight: bold; color: #ffd700;">0</span></p>
+                        <p style="font-size: 16px; margin-bottom:10px;">Rebirthing now will grant: <span id="gfOnRebirthDisplay" style="font-weight: bold; color: #ffd700;">0</span> Golden Feather(s).</p>
+                        <button id="rebirthButton" style="font-size: 17px; padding: 10px 20px; background-color: #ffd700; color: #333; border: none; border-radius: 22px; cursor: pointer; display: none;">Rebirth for Golden Feathers</button>
+                    </div>
+
+                    <button id="clickerQuackToggleBtn" style="margin-top: 20px; margin-bottom: 15px; font-size: 14px; padding: 8px 12px; background-color: #ffff00; color: #000; border: none; border-radius: 20px; cursor: pointer;">Quack Sound: ON</button>
+
+                    <!-- Save/Load Controls -->
+                    <div id="saveLoadControls" style="margin-top: 10px; padding: 10px; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
+                        <button id="saveGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ff00; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Save Progress</button>
+                        <button id="loadGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ffff; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Load Progress</button>
+                        <button id="resetGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #ff0000; color: #fff; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Reset Game</button>
                     </div>
                 </div>
+            </div> <!-- End of duckClickerTab -->
 
-                <!-- Upgrades Section -->
-                <div id="upgradesSection" style="min-width: 280px; margin: 10px; padding: 10px; background-color: rgba(255, 0, 255, 0.1); border-radius: 8px; border: 1px solid #ff00ff;">
-                    <h3 style="font-size: 22px; color: #ffff00; margin-bottom: 10px; border-bottom: 1px solid #ffff00; padding-bottom: 5px;">Quack Enhancements</h3>
-                    <div id="upgradesListContainer">
-                        <!-- Upgrade items will be populated here by JavaScript -->
-                        <!-- Example of one item:
-                        <div class="upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.3); border-radius: 5px;">
-                            <h4 style="font-size: 18px; color: #00ffff;">Reinforced Beak I</h4>
-                            <p style="font-size: 14px;">Effect: Click power x2</p>
-                            <p style="font-size: 14px;">Cost: <span class="upgrade-cost">100</span> QP</p>
-                            <button class="buy-upgrade" data-upgrade-id="reinforcedBeak1">Buy</button>
-                        </div>
-                        -->
+            <div id="retroArcadeTab" class="game-tab-content" style="display:none;">
+                <div class="game-container" id="retroArcadeSection" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ffff00;">
+                    <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 20px;">Retro Arcade</h2>
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Pac-Man (1983)</h3>
+                        <iframe src="https://archive.org/embed/msdos_Pac-Man_1983" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">The Oregon Trail (1990)</h3>
+                        <iframe src="https://archive.org/embed/msdos_Oregon_Trail_The_1990" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+                    </div>
+                    <div style="margin-bottom: 30px; margin-top: 30px;">
+                        <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Blockout (1989) - 3D Tetris</h3>
+                        <iframe src="https://archive.org/embed/msdos_Blockout_1989" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+                    </div>
+                    <div style="margin-bottom: 30px; margin-top: 30px;">
+                        <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Prince of Persia (1990)</h3>
+                        <iframe src="https://archive.org/embed/msdos_Prince_of_Persia_1990" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
                     </div>
                 </div>
-
-                <!-- Golden Feather Upgrades Section -->
-                <div id="goldenFeatherUpgradesSection" style="min-width: 280px; flex-basis: 45%; margin: 10px; padding: 10px; background-color: rgba(255, 215, 0, 0.2); border-radius: 8px; border: 1px solid #ffd700;">
-                    <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px; border-bottom: 1px solid #ffd700; padding-bottom: 5px;">Golden Feather Blessings</h3>
-                    <div id="gfUpgradesListContainer">
-                        <!-- Golden Feather Upgrade items will be populated here by JavaScript -->
-                        <!-- Example:
-                        <div class="gf-upgrade-item" style="padding: 8px; margin-bottom: 8px; background-color: rgba(0,0,0,0.4); border-radius: 5px;">
-                            <h4 style="font-size: 18px; color: #ffd700;">Permanent Click Boost I</h4>
-                            <p style="font-size: 14px;">Effect: +1 QP per click (Permanent)</p>
-                            <p style="font-size: 14px;">Cost: <span class="gf-upgrade-cost">1</span> GF</p>
-                            <button class="buy-gf-upgrade" data-gf-upgrade-id="permClickBoost1">Buy with GF</button>
-                        </div>
-                        -->
-                    </div>
-                </div>
-            </div> <!-- End of gameSectionsWrapper -->
-
-            <!-- Rebirth Section -->
-            <div id="rebirthSection" style="margin-top: 25px; padding: 15px; background-color: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; border-radius: 8px; text-align: center;">
-                <h3 style="font-size: 22px; color: #ffd700; margin-bottom: 10px;">Rebirth & Golden Feathers</h3>
-                <p style="font-size: 18px;">Golden Feathers: <span id="goldenFeathersDisplay" style="font-weight: bold; color: #ffd700;">0</span></p>
-                <p style="font-size: 16px; margin-bottom:10px;">Rebirthing now will grant: <span id="gfOnRebirthDisplay" style="font-weight: bold; color: #ffd700;">0</span> Golden Feather(s).</p>
-                <button id="rebirthButton" style="font-size: 17px; padding: 10px 20px; background-color: #ffd700; color: #333; border: none; border-radius: 22px; cursor: pointer; display: none;">Rebirth for Golden Feathers</button>
-            </div>
-
-            <!-- Save/Load Controls -->
-            <div id="saveLoadControls" style="margin-top: 30px; padding: 10px; background-color: rgba(255,255,255,0.1); border-radius: 8px;">
-                <button id="saveGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ff00; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Save Progress</button>
-                <button id="loadGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #00ffff; color: #000; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Load Progress</button>
-                <button id="resetGameButton" style="font-size: 16px; padding: 10px 15px; background-color: #ff0000; color: #fff; border: none; border-radius: 20px; cursor: pointer; margin: 5px;">Reset Game</button>
-            </div>
-        </div>
+            </div> <!-- End of retroArcadeTab -->
+        </div> <!-- End of the first, correct gamesArea -->
 
         <!-- Super Level Display Area -->
         <div id="superLevelDisplayArea" style="display: none; margin-top: 20px; padding: 20px; border: 2px solid #dda0dd; border-radius: 10px; background-color: rgba(221,160,221, 0.1); text-align: center;">
@@ -529,24 +829,9 @@
                 <!-- Content specific to the current super level will go here -->
             </div>
             <button id="returnToNormalPlaneButton" style="margin-top: 20px; font-size: 16px; padding: 10px 15px; background-color: #ccc; color: #000; border-radius: 20px;">Return to Mortal Ducks</button>
-        </div>
+        </div> <!-- End of superLevelDisplayArea -->
 
-        <div class="game-container" id="retroArcadeSection" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ffff00;">
-            <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 20px;">Retro Arcade</h2>
-            <div style="margin-bottom: 30px;">
-                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Pac-Man (1983)</h3>
-                <iframe src="https://archive.org/embed/msdos_Pac-Man_1983" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-            </div>
-            <div>
-                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">The Oregon Trail (1990)</h3>
-                <iframe src="https://archive.org/embed/msdos_Oregon_Trail_The_1990" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-            </div>
-            <div style="margin-bottom: 30px; margin-top: 30px;">
-                <h3 style="font-size: 22px; color: #00ffff; margin-bottom: 10px;">Blockout (1989) - 3D Tetris</h3>
-                <iframe src="https://archive.org/embed/msdos_Blockout_1989" width="600" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-            </div>
-        </div>
-
+        <!-- The socialAndConnectSection starts here, the duplicated gamesArea is removed -->
         <div id="socialAndConnectSection" style="margin-top: 40px; padding: 20px; background-color: rgba(50, 50, 50, 0.3); border-top: 2px solid #ffff00; text-align: center;">
             <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 25px;">Connect With Waefre Beorn</h2>
 
@@ -561,7 +846,7 @@
             <div id="wubuSphereVisualizer">
                 <h3 style="font-size: 22px; color: #ff00ff; margin-bottom: 10px;">Wubu Sphere Visualizer</h3>
                 <p style="margin-bottom:10px;"><a href="https://wubu-sphere-visual.replit.app/" target="_blank" style="color: #ffff00;">Link to Wubu Sphere</a></p>
-                <iframe src="https://wubu-sphere-visual.replit.app/" width="700" height="500" frameborder="0" style="border:2px solid #ff00ff; border-radius:8px; max-width:100%;"></iframe>
+                <iframe src="https://wubu-sphere-visual.replit.app/" frameborder="0"></iframe>
             </div>
         </div>
 
@@ -570,13 +855,51 @@
             <h3 style="font-size: 22px; color: #da70d6; margin-bottom: 10px;">Celestial Portal</h3>
             <button id="ascendToHeavenButton" style="font-size: 16px; padding: 10px 15px; background-color: #add8e6; color: #000; border: none; border-radius: 20px; cursor: pointer;">Ascend to Duck Heaven</button>
             <!-- More buttons for Hell/Nexus can be added here later -->
+        </div> <!-- End of celestialPortalSection -->
+
+        <div id="bottomPongGag" class="game-container" style="margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ff00ff; text-align: center;">
+            <h2 class="glitter-text" style="font-size: 28px; margin-bottom: 20px;">...and Pong! (because why not?)</h2>
+            <div class="game-container"> <!-- This is the original Pong container -->
+                <canvas id="pongCanvas" width="400" height="300"></canvas>
+                <div class="cube-container">
+                    <div id="duckCube" class="cube">
+                        <div class="front"></div>
+                        <div class="back"></div>
+                        <div class="right"></div>
+                        <div class="left"></div>
+                        <div class="top"></div>
+                        <div class="bottom"></div>
+                    </div>
+                </div>
+            </div>
+            <button id="playButton">Quack: ON</button>
+            <button id="soundButton">Video Sound: OFF</button>
         </div>
-    </div>
+    </div> <!-- End of .content div -->
 
     <!-- Script includes should be at the end of the body -->
     <script src="duck.js"></script>
     <script src="main.js"></script>
     <script src="pong_game.js"></script>
     <script src="duck_clicker.js"></script>
+
+    <script>
+        function openGameTab(evt, gameName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("game-tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(gameName).style.display = "block";
+            evt.currentTarget.className += " active";
+
+            // Note: Pong-specific logic removed as it's no longer in a tab.
+            // If other tabs need specific JS on show, add new conditions here.
+        }
+    </script>
 </body>
 </html>
