@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // DOM Elements
     const clickableDuckV2 = document.getElementById('clickableDuckV2');
-    if (clickableDuckV2) { clickableDuckV2.src = duckClosed; }
+    if (clickableDuckV2) { clickableDuckV2.src = 'duck_closed.png'; }
 
     // Implement Click Animation:
     if (clickableDuckV2) {
         clickableDuckV2.addEventListener('mousedown', () => {
-            clickableDuckV2.src = duckOpen;
+            clickableDuckV2.src = 'duck_open.png';
             // Play quack sound if enabled (existing logic)
             if (isClickerQuackEnabled && clickerQuackSound) {
                 clickerQuackSound.currentTime = 0; // Rewind to start
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (clickableDuckV2) {
         clickableDuckV2.addEventListener('mouseup', () => {
-            clickableDuckV2.src = duckClosed;
+            clickableDuckV2.src = 'duck_closed.png';
         });
     }
 
